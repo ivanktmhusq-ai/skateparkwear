@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>SPW — Skatepark Wear / Minsk</title>
-<meta name="description" content="SPW — Skatepark Wear. Бэгги-шорты и штаны из Минска. Скейт, двор, рэп. Доставка по РБ и СНГ." />
+<meta name="description" content="SPW — Skatepark Wear. Бэгги-джинсы, шорты и штаны из Минска. Скейт, двор, рэп. Доставка по РБ и СНГ." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -18,63 +18,42 @@
     --accent: #1B3CFF;
     --muted:  #807C73;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body {
-    background: var(--paper); color: var(--ink);
-    font-family: 'Inter', sans-serif; font-weight: 400;
-    overflow-x: hidden; -webkit-font-smoothing: antialiased; line-height: 1.5;
-  }
+  body { background: var(--paper); color: var(--ink); font-family: 'Inter', sans-serif; font-weight: 400; overflow-x: hidden; -webkit-font-smoothing: antialiased; line-height: 1.5; }
   ::selection { background: var(--accent); color: #fff; }
   a { color: inherit; text-decoration: none; }
   img { display: block; max-width: 100%; }
   .display { font-family: 'Archivo', sans-serif; text-transform: uppercase; }
   .mono { font-family: 'Space Mono', monospace; }
   .wrap { max-width: 1320px; margin: 0 auto; padding: 0 28px; }
-  .mono-label {
-    font-family: 'Space Mono', monospace; font-size: 11px;
-    letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
-  }
+  .mono-label { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
 
-  /* ===== SCROLL PROGRESS ===== */
-  .scroll-progress {
-    position: fixed; top: 0; left: 0; height: 3px; width: 0;
-    background: var(--accent); z-index: 1800; transition: width .1s linear;
-  }
+  /* SCROLL PROGRESS */
+  .scroll-progress { position: fixed; top:0; left:0; height:3px; width:0; background: var(--accent); z-index:1800; transition: width .1s linear; }
 
-  /* ===== LOADER (with CSS fail-safe) ===== */
-  #loader {
-    position: fixed; inset: 0; z-index: 2000;
-    background: var(--steel); color: var(--paper);
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
-    transition: transform 0.7s cubic-bezier(.76,0,.24,1);
-    animation: loaderFailsafe 0.5s ease 3.2s forwards; /* guarantees dismissal even if JS dies */
-  }
-  @keyframes loaderFailsafe { to { opacity: 0; visibility: hidden; pointer-events: none; } }
-  #loader.done { transform: translateY(-100%); animation: none; }
-  #loader .l-logo {
-    font-family:'Archivo',sans-serif; font-weight:900;
-    font-size: clamp(64px,16vw,180px); letter-spacing:.02em; line-height:1;
-    overflow: hidden;
-  }
+  /* LOADER */
+  #loader { position: fixed; inset:0; z-index:2000; background: var(--steel); color: var(--paper); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; transition: transform .7s cubic-bezier(.76,0,.24,1); animation: loaderFailsafe .5s ease 3.2s forwards; }
+  @keyframes loaderFailsafe { to { opacity:0; visibility:hidden; pointer-events:none; } }
+  #loader.done { transform: translateY(-100%); animation:none; }
+  #loader .l-logo { font-family:'Archivo',sans-serif; font-weight:900; font-size: clamp(64px,16vw,180px); letter-spacing:.02em; line-height:1; overflow:hidden; }
   #loader .l-logo span { display:inline-block; animation: rise .6s cubic-bezier(.2,.8,.2,1) both; }
   #loader .l-logo span:nth-child(2){ animation-delay:.08s; }
   #loader .l-logo span:nth-child(3){ animation-delay:.16s; }
   @keyframes rise { from { transform: translateY(110%); } to { transform: translateY(0); } }
   #loader .l-meta { font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.3em; text-transform:uppercase; display:flex; gap:14px; color:#9a968c; }
   #loader .l-count { color: var(--accent); }
-  .l-bar { width: min(280px,60vw); height: 2px; background: #45443f; overflow:hidden; }
+  .l-bar { width:min(280px,60vw); height:2px; background:#45443f; overflow:hidden; }
   .l-bar i { display:block; height:100%; width:0; background: var(--accent); transition: width .1s linear; }
 
-  /* ===== TICKER ===== */
+  /* TICKER */
   .ticker { background: var(--steel); color: var(--paper); overflow:hidden; white-space:nowrap; border-bottom:1px solid #000; }
   .ticker__track { display:inline-flex; animation: tick 30s linear infinite; }
   .ticker__track span { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; text-transform:uppercase; padding:9px 0; margin-right:36px; display:inline-flex; gap:36px; }
   .ticker b { color: var(--accent); font-weight:400; }
   @keyframes tick { from{transform:translateX(0);} to{transform:translateX(-50%);} }
 
-  /* ===== NAV ===== */
+  /* NAV */
   header.nav { position: sticky; top:0; z-index:900; background: rgba(231,229,223,.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom:1px solid var(--line); }
   .nav__inner { display:flex; align-items:center; justify-content:space-between; height:64px; }
   .nav__logo { font-family:'Archivo',sans-serif; font-weight:900; font-size:24px; letter-spacing:.04em; }
@@ -90,13 +69,8 @@
   .nav.open .nav__burger span:nth-child(2){ opacity:0; }
   .nav.open .nav__burger span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
 
-  /* ===== BUTTONS ===== */
-  .btn {
-    display:inline-flex; align-items:center; gap:10px;
-    font-family:'Space Mono',monospace; font-weight:700; text-transform:uppercase; letter-spacing:.12em; font-size:13px;
-    cursor:pointer; padding:15px 28px; border:1px solid var(--ink); background: var(--ink); color: var(--paper);
-    transition: background .2s,color .2s,border-color .2s; position:relative; overflow:hidden;
-  }
+  /* BUTTONS */
+  .btn { display:inline-flex; align-items:center; gap:10px; font-family:'Space Mono',monospace; font-weight:700; text-transform:uppercase; letter-spacing:.12em; font-size:13px; cursor:pointer; padding:15px 28px; border:1px solid var(--ink); background: var(--ink); color: var(--paper); transition: background .2s,color .2s,border-color .2s; position:relative; overflow:hidden; }
   .btn .arr { transition: transform .25s ease; display:inline-block; }
   .btn:hover .arr { transform: translateX(5px); }
   .btn:hover, .btn:focus-visible { background: var(--accent); border-color: var(--accent); color:#fff; outline:none; }
@@ -105,7 +79,7 @@
   .btn:disabled { opacity:.4; cursor:not-allowed; }
   .btn:disabled:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
-  /* ===== HERO ===== */
+  /* HERO */
   .hero { padding:56px 0 40px; }
   .hero__top { display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; border-bottom:1px solid var(--line); padding-bottom:14px; margin-bottom:36px; }
   .hero__title { font-family:'Archivo',sans-serif; font-weight:900; text-transform:uppercase; font-size: clamp(56px,15vw,220px); line-height:.82; letter-spacing:-0.01em; }
@@ -116,34 +90,34 @@
   .hero__grid { display:grid; grid-template-columns:1.4fr 1fr; gap:32px; align-items:end; margin-top:30px; }
   .hero__lead { font-size: clamp(16px,2vw,21px); max-width:32ch; color: var(--steel); }
   .hero__cta-row { display:flex; gap:14px; margin-top:28px; flex-wrap:wrap; }
-  .hero__panel { position:relative; aspect-ratio:16/12; overflow:hidden; background: var(--steel); color: var(--paper); }
-  .hero__panel .ph-fill { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:space-between; padding:20px; z-index:1; }
-  .hero__panel img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:2; transition: transform 1.2s ease; }
+  .hero__panel { position:relative; aspect-ratio:4/5; overflow:hidden; background: var(--steel); color: var(--paper); }
+  .hero__panel img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1; transition: transform 1.2s ease; }
   .hero__panel:hover img { transform: scale(1.06); }
   .hero__panel img.img-missing { display:none; }
-  .ph-tag { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; color:#9a968c; }
-  .ph-big { font-family:'Archivo',sans-serif; font-weight:800; text-transform:uppercase; font-size: clamp(20px,3vw,34px); line-height:.95; }
+  .hero__panel .ph-fill { position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; justify-content:space-between; padding:20px; background: linear-gradient(180deg, rgba(0,0,0,.4), transparent 35%, rgba(0,0,0,.5)); }
+  .ph-tag { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; color:#e7e5df; }
+  .ph-big { font-family:'Archivo',sans-serif; font-weight:800; text-transform:uppercase; font-size: clamp(20px,3vw,34px); line-height:.95; color:#fff; }
   .ph-mark { color: var(--accent); }
 
-  /* ===== MARQUEE ===== */
+  /* MARQUEE */
   .marquee { background: var(--accent); color:#fff; overflow:hidden; white-space:nowrap; border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); margin:8px 0; }
   .marquee__track { display:inline-flex; animation: tick 26s linear infinite; }
   .marquee__track span { font-family:'Archivo',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:.06em; font-size: clamp(18px,2.6vw,30px); padding:14px 0; margin-right:44px; }
 
-  /* ===== SECTION ===== */
+  /* SECTION */
   section.block { padding:84px 0; }
   .sec-head { display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; border-bottom:1px solid var(--line); padding-bottom:16px; margin-bottom:44px; }
   .sec-head h2 { font-family:'Archivo',sans-serif; font-weight:900; text-transform:uppercase; font-size: clamp(34px,6vw,78px); line-height:.9; letter-spacing:-0.01em; }
   .sec-head .idx { font-family:'Space Mono',monospace; color: var(--accent); font-size:13px; letter-spacing:.1em; }
 
-  /* ===== MANIFESTO ===== */
+  /* MANIFESTO */
   .manifesto p { font-family:'Archivo',sans-serif; font-weight:600; text-transform:uppercase; font-size: clamp(22px,3.6vw,46px); line-height:1.12; }
   .manifesto p .accent { color: var(--accent); }
   .manifesto p .out { -webkit-text-stroke:1px var(--ink); color:transparent; }
   .manifesto .sub { font-family:'Inter',sans-serif; font-weight:400; text-transform:none; font-size:16px; color: var(--steel); max-width:62ch; margin-top:28px; line-height:1.6; }
 
-  /* ===== CATALOG ===== */
-  .grid { display:grid; grid-template-columns: repeat(2,1fr); gap:1px; background: var(--line); border:1px solid var(--line); }
+  /* CATALOG */
+  .grid { display:grid; grid-template-columns: repeat(3,1fr); gap:1px; background: var(--line); border:1px solid var(--line); }
   .card { background: var(--paper); display:flex; flex-direction:column; transition: background .25s; }
   .card:hover { background: var(--card); }
   .card__media { position:relative; aspect-ratio:4/5; overflow:hidden; border-bottom:1px solid var(--line); background: linear-gradient(135deg,#d6d3ca,#cfccc2); display:flex; align-items:center; justify-content:center; }
@@ -158,22 +132,20 @@
   .card__status.in { color: var(--accent); border-color: var(--accent); }
   .card__body { padding:20px; display:flex; flex-direction:column; gap:14px; flex:1; }
   .card__head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
-  .card__name { font-family:'Archivo',sans-serif; font-weight:800; text-transform:uppercase; font-size:20px; line-height:1; }
-  .card__price { font-family:'Space Mono',monospace; font-weight:700; font-size:16px; white-space:nowrap; }
-  .card__desc { font-size:14px; color: var(--steel); line-height:1.55; }
+  .card__name { font-family:'Archivo',sans-serif; font-weight:800; text-transform:uppercase; font-size:19px; line-height:1; }
+  .card__price { font-family:'Space Mono',monospace; font-weight:700; font-size:15px; white-space:nowrap; }
+  .card__desc { font-size:13.5px; color: var(--steel); line-height:1.55; flex:1; }
   .specs { display:grid; grid-template-columns:auto 1fr; gap:4px 16px; border-top:1px solid var(--line); padding-top:12px; }
   .specs dt { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color: var(--muted); }
   .specs dd { font-family:'Space Mono',monospace; font-size:11px; text-align:right; }
   .card__foot { display:flex; align-items:center; justify-content:space-between; gap:12px; }
   .sizes { display:flex; gap:5px; flex-wrap:wrap; }
-  .sizes span { font-family:'Space Mono',monospace; border:1px solid var(--line); color: var(--steel); font-size:11px; padding:3px 7px; transition: background .2s,color .2s,border-color .2s; }
+  .sizes span { font-family:'Space Mono',monospace; border:1px solid var(--line); color: var(--steel); font-size:11px; padding:3px 7px; }
   .card:hover .sizes span { border-color: var(--muted); }
   .card .btn { width:100%; justify-content:center; }
-  .card.sold .card__media { filter: grayscale(1); opacity:.75; }
-  .card.sold .card__name, .card.sold .card__price { opacity:.55; }
 
-  /* ===== SIZE CHARTS ===== */
-  .size-tabs { display:flex; gap:0; margin-bottom:28px; border:1px solid var(--ink); width: fit-content; }
+  /* SIZE CHARTS */
+  .size-tabs { display:flex; margin-bottom:28px; border:1px solid var(--ink); width: fit-content; }
   .size-tab { font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.12em; text-transform:uppercase; padding:11px 26px; background:transparent; border:none; cursor:pointer; color: var(--ink); transition: background .2s,color .2s; }
   .size-tab + .size-tab { border-left:1px solid var(--ink); }
   .size-tab.active { background: var(--ink); color: var(--paper); }
@@ -190,32 +162,35 @@
   .size-legend .lg b { font-family:'Space Mono',monospace; color: var(--accent); min-width:18px; }
   .size-note { font-family:'Space Mono',monospace; font-size:11px; color: var(--muted); margin-top:18px; letter-spacing:.05em; }
 
-  /* ===== LOOKBOOK ===== */
+  /* LOOKBOOK */
   .lookbook-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
   .look { position:relative; aspect-ratio:3/4; overflow:hidden; background: var(--steel); color: var(--paper); }
   .look img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1; transition: transform .8s ease; }
   .look:hover img { transform: scale(1.06); }
   .look img.img-missing { display:none; }
-  .look .l-fill { position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; justify-content:space-between; padding:18px; background: linear-gradient(180deg, rgba(0,0,0,.25), transparent 40%, rgba(0,0,0,.35)); }
-  .look:hover .l-fill { background: linear-gradient(180deg, rgba(0,0,0,.1), transparent 50%, rgba(27,60,255,.35)); }
-  .look .l-idx { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; color:#d8d6cf; }
-  .look .l-cap { font-family:'Archivo',sans-serif; font-weight:800; text-transform:uppercase; font-size: clamp(18px,2.4vw,26px); line-height:.95; }
-  .look .l-slot { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em; color:#bfe8ff; }
+  .look .l-fill { position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; justify-content:space-between; padding:18px; background: linear-gradient(180deg, rgba(0,0,0,.3), transparent 40%, rgba(0,0,0,.45)); }
+  .look:hover .l-fill { background: linear-gradient(180deg, rgba(0,0,0,.15), transparent 50%, rgba(27,60,255,.4)); }
+  .look .l-idx { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; color:#e7e5df; }
+  .look .l-cap { font-family:'Archivo',sans-serif; font-weight:800; text-transform:uppercase; font-size: clamp(18px,2.4vw,26px); line-height:.95; color:#fff; }
 
-  /* ===== ABOUT ===== */
+  /* ABOUT */
   .about-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:60px; align-items:start; }
   .about-text p { font-size:17px; line-height:1.7; color: var(--steel); margin-bottom:18px; }
   .about-text p b { color: var(--ink); }
   .about-text .pull { font-family:'Archivo',sans-serif; font-weight:700; text-transform:uppercase; font-size: clamp(20px,2.6vw,30px); line-height:1.1; color: var(--ink); margin:8px 0 24px; }
+  .about-mascot { margin-top:26px; border:1px solid var(--line); background:#fff; padding:18px 20px; display:flex; align-items:center; gap:18px; }
+  .about-mascot img { width:84px; height:84px; object-fit:contain; flex-shrink:0; }
+  .about-mascot .mtxt { font-family:'Space Mono',monospace; font-size:12px; color: var(--muted); letter-spacing:.04em; line-height:1.55; }
+  .about-mascot .mtxt b { color: var(--ink); }
   .facts { display:flex; flex-direction:column; }
   .fact { border-top:1px solid var(--line); padding:20px 0; display:flex; gap:16px; align-items:flex-start; transition: padding-left .25s ease; }
-  .fact:hover { padding-left: 10px; }
+  .fact:hover { padding-left:10px; }
   .fact:last-child { border-bottom:1px solid var(--line); }
   .fact .f-no { font-family:'Space Mono',monospace; color: var(--accent); font-size:12px; padding-top:3px; }
   .fact .f-title { font-family:'Archivo',sans-serif; font-weight:800; text-transform:uppercase; font-size:17px; }
   .fact .f-text { font-size:14px; color: var(--muted); margin-top:4px; }
 
-  /* ===== FAQ ===== */
+  /* FAQ */
   .faq { border-top:1px solid var(--line); }
   .faq details { border-bottom:1px solid var(--line); }
   .faq summary { list-style:none; cursor:pointer; padding:22px 0; display:flex; justify-content:space-between; align-items:center; gap:16px; font-family:'Archivo',sans-serif; font-weight:700; text-transform:uppercase; font-size: clamp(16px,2.2vw,22px); transition: color .2s; }
@@ -225,7 +200,7 @@
   .faq details[open] summary .plus { transform: rotate(45deg); }
   .faq .answer { padding:0 0 22px; color: var(--steel); font-size:15px; line-height:1.65; max-width:70ch; }
 
-  /* ===== FOOTER ===== */
+  /* FOOTER */
   footer { background: var(--steel); color: var(--paper); padding:70px 0 28px; margin-top:40px; }
   .foot-top { display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px; padding-bottom:50px; border-bottom:1px solid #3a3a36; }
   .foot-logo { font-family:'Archivo',sans-serif; font-weight:900; font-size: clamp(60px,12vw,140px); line-height:.85; }
@@ -237,23 +212,23 @@
   .foot-bottom p { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em; color:#9a968c; }
   .foot-note { color:#c9c5bb !important; }
 
-  /* ===== REVEAL ===== */
+  /* REVEAL */
   .reveal { opacity:0; transform: translateY(28px); transition: opacity .6s ease-out, transform .6s ease-out; }
   .reveal.visible { opacity:1; transform:none; }
   .stagger > * { opacity:0; transform: translateY(28px); transition: opacity .6s ease-out, transform .6s ease-out; }
   .stagger.visible > * { opacity:1; transform:none; }
   .stagger.visible > *:nth-child(1){ transition-delay:0s; }
-  .stagger.visible > *:nth-child(2){ transition-delay:.08s; }
-  .stagger.visible > *:nth-child(3){ transition-delay:.16s; }
-  .stagger.visible > *:nth-child(4){ transition-delay:.24s; }
-  .stagger.visible > *:nth-child(5){ transition-delay:.32s; }
-  .stagger.visible > *:nth-child(6){ transition-delay:.4s; }
+  .stagger.visible > *:nth-child(2){ transition-delay:.07s; }
+  .stagger.visible > *:nth-child(3){ transition-delay:.14s; }
+  .stagger.visible > *:nth-child(4){ transition-delay:.21s; }
+  .stagger.visible > *:nth-child(5){ transition-delay:.28s; }
+  .stagger.visible > *:nth-child(6){ transition-delay:.35s; }
 
-  /* ===== MODAL ===== */
+  /* MODAL */
   .overlay { position:fixed; inset:0; background: rgba(18,18,17,.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display:none; align-items:center; justify-content:center; padding:24px; z-index:1500; opacity:0; transition: opacity .25s ease; }
   .overlay.open { display:flex; opacity:1; }
   .modal { background: var(--paper); border:1px solid var(--ink); width:100%; max-width:460px; padding:32px; position:relative; max-height:92vh; overflow-y:auto; transform: translateY(16px) scale(.98); transition: transform .3s cubic-bezier(.2,.8,.2,1); }
-  .overlay.open .modal { transform: none; }
+  .overlay.open .modal { transform:none; }
   .modal .m-idx { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; color: var(--accent); text-transform:uppercase; }
   .modal h3 { font-family:'Archivo',sans-serif; font-weight:900; text-transform:uppercase; font-size:26px; margin:6px 0 2px; }
   .modal .m-price { font-family:'Space Mono',monospace; font-weight:700; font-size:15px; margin-bottom:22px; }
@@ -268,12 +243,13 @@
   .modal .btn { width:100%; justify-content:center; margin-top:6px; }
   .modal .m-hint { font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.08em; color: var(--muted); margin-top:14px; text-align:center; }
 
-  /* ===== BACK TO TOP ===== */
+  /* BACK TO TOP */
   .to-top { position:fixed; right:22px; bottom:22px; z-index:880; width:46px; height:46px; border:1px solid var(--ink); background: var(--paper); color: var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0; transform: translateY(12px); pointer-events:none; transition: opacity .3s, transform .3s, background .2s, color .2s; font-size:18px; }
   .to-top.show { opacity:1; transform:none; pointer-events:auto; }
   .to-top:hover { background: var(--accent); color:#fff; border-color: var(--accent); }
 
-  /* ===== RESPONSIVE ===== */
+  /* RESPONSIVE */
+  @media (max-width: 1000px) { .grid { grid-template-columns: repeat(2,1fr); } }
   @media (max-width: 900px) {
     .hero__grid { grid-template-columns:1fr; gap:24px; }
     .about-grid { grid-template-columns:1fr; gap:40px; }
@@ -286,14 +262,14 @@
     .nav__burger { display:flex; }
     .nav.open .nav__links { display:flex; position:absolute; top:64px; left:0; right:0; flex-direction:column; gap:0; background: var(--paper); border-bottom:1px solid var(--line); }
     .nav.open .nav__links a { padding:16px 28px; border-top:1px solid var(--line); }
-    .grid { grid-template-columns:1fr; }
     section.block { padding:60px 0; }
   }
+  @media (max-width: 620px) { .grid { grid-template-columns:1fr; } }
   @media (max-width: 520px) { .lookbook-grid { grid-template-columns:1fr; } .wrap { padding:0 18px; } }
 
-  /* ===== REDUCED MOTION ===== */
+  /* REDUCED MOTION */
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior:auto !important; }
+    *, *::before, *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
     .reveal, .stagger > * { opacity:1 !important; transform:none !important; }
     #loader { display:none !important; }
     .hero__title .word > span { transform:none !important; }
@@ -348,18 +324,18 @@
 
       <div class="hero__grid">
         <div>
-          <p class="hero__lead">Бэгги-шорты и штаны для тех, кто живёт между рампой, двором и последним вагоном метро. Камо, плотный котон, фирменная граффити-вышивка. Сделано в Минске.</p>
+          <p class="hero__lead">Бэгги-джинсы, шорты и штаны для тех, кто живёт между рампой, двором и последним вагоном метро. Камо, плотный котон, фирменная вышивка-маскот. Сделано в Минске.</p>
           <div class="hero__cta-row">
             <a href="#catalog" class="btn">Смотреть дроп <span class="arr">→</span></a>
             <a href="#sizes" class="btn btn--ghost">Размерная сетка</a>
           </div>
         </div>
         <div class="hero__panel">
-          <img src="images/hero-camo.jpg" alt="SPW camo baggy" onerror="this.classList.add('img-missing')" />
+          <img src="images/photo_2026-06-17_18-55-28.jpg" alt="SPW camo baggy lookbook" onerror="this.classList.add('img-missing')" />
           <div class="ph-fill">
             <span class="ph-tag">FIG. 01 / LOOKBOOK</span>
-            <div class="ph-big">SS26<br><span class="ph-mark">— DROP 01</span></div>
-            <span class="ph-tag">[ images/hero-camo.jpg ]</span>
+            <div class="ph-big">SS26<br><span class="ph-mark">— CAMO DROP</span></div>
+            <span class="ph-tag">SPW / MINSK</span>
           </div>
         </div>
       </div>
@@ -378,7 +354,7 @@
   <section class="block manifesto">
     <div class="wrap reveal">
       <p>SPW — это не просто <span class="out">одежда.</span> Это про скейт, двор и <span class="accent">всё что между.</span></p>
-      <p class="sub">Бренд вырос из минской скейт-тусовки: разбитые доски, бордюры у ДК, рэп из колонки на телефоне. Делаем бэгги-крой, который не сковывает на доске, плотные ткани и честные посадки. Камуфляжные расцветки, чёрные шорты с фирменной граффити-вышивкой «Skatepark Wear». Каждый дроп — ограниченным тиражом.</p>
+      <p class="sub">Бренд вырос из минской скейт-тусовки: разбитые доски, бордюры у ДК, рэп из колонки на телефоне. Делаем бэгги-крой — широкие джинсы, шорты и штаны, которые не сковывают на доске. Камуфляж, деним, чёрный котон, фирменная вышивка-маскот «тыква-ведьма» и граффити «Skatepark Wear». Каждый дроп — ограниченным тиражом.</p>
     </div>
   </section>
 
@@ -392,97 +368,103 @@
 
       <div class="grid stagger">
 
-        <!-- 01 BLACK SHORTS -->
-        <article class="card" data-product="SPW SHORTS — BLACK" data-price="99 BYN" data-sizes="XS,S,M,L,XL,XXL">
+        <!-- 01 -->
+        <article class="card" data-product="SPW SHORTS — BLACK / GRAFFITI" data-price="99 BYN" data-sizes="XS,S,M,L,XL,XXL">
           <div class="card__media">
-            <img src="images/black-flat.jpg" alt="SPW Black Shorts" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
+            <img src="images/photo_2026-06-17_18-55-12.jpg" alt="SPW Black Graffiti Shorts" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
             <span class="card__num">01</span>
             <span class="card__status in">В наличии</span>
-            <div class="card__ph"><div class="pmark">[ ФОТО ]</div><div class="pnote">images/black-flat.jpg</div></div>
+            <div class="card__ph"><div class="pmark">[ ФОТО ]</div></div>
           </div>
           <div class="card__body">
-            <div class="card__head">
-              <div class="card__name">Shorts — Black</div>
-              <div class="card__price">99 BYN</div>
-            </div>
-            <p class="card__desc">Сигнатурные бэгги-шорты до колена. Плотный чёрный котон, фирменная граффити-вышивка «Skatepark Wear» по низу штанины. Пояс на пуговице со шлёвками, два задних кармана, широкий свободный крой.</p>
-            <dl class="specs">
-              <dt>Крой</dt><dd>Baggy / knee</dd>
-              <dt>Деталь</dt><dd>Graffiti embroidery</dd>
-              <dt>Цвет</dt><dd>Black</dd>
-            </dl>
+            <div class="card__head"><div class="card__name">Shorts — Graffiti</div><div class="card__price">99 BYN</div></div>
+            <p class="card__desc">Сигнатурные бэгги-шорты до колена. Чёрный плотный котон, белая граффити-вышивка «Skatepark Wear» по низу штанины. Пояс со шлёвками, два задних кармана, широкий свободный крой.</p>
+            <dl class="specs"><dt>Крой</dt><dd>Baggy / knee</dd><dt>Деталь</dt><dd>Graffiti embroidery</dd><dt>Цвет</dt><dd>Black</dd></dl>
             <div class="card__foot"><div class="sizes"><span>XS</span><span>S</span><span>M</span><span>L</span><span>XL</span><span>XXL</span></div></div>
             <button class="btn order-btn">Заказать <span class="arr">→</span></button>
           </div>
         </article>
 
-        <!-- 02 TIGER CAMO -->
-        <article class="card" data-product="SPW SHORTS — TIGER CAMO" data-price="109 BYN" data-sizes="XS,S,M,L,XL,XXL">
+        <!-- 02 -->
+        <article class="card" data-product="SPW SHORTS — BLACK / MASCOT" data-price="99 BYN" data-sizes="XS,S,M,L,XL,XXL">
           <div class="card__media">
-            <img src="images/camo-tiger.jpg" alt="SPW Tiger Camo Shorts" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
+            <img src="images/photo_2026-06-17_18-54-51.jpg" alt="SPW Black Mascot Shorts" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
             <span class="card__num">02</span>
             <span class="card__status in">В наличии</span>
-            <div class="card__ph"><div class="pmark">[ ФОТО ]</div><div class="pnote">images/camo-tiger.jpg</div></div>
+            <div class="card__ph"><div class="pmark">[ ФОТО ]</div></div>
           </div>
           <div class="card__body">
-            <div class="card__head">
-              <div class="card__name">Shorts — Tiger Camo</div>
-              <div class="card__price">109 BYN</div>
-            </div>
-            <p class="card__desc">Бэгги-шорты в камуфляже «tiger stripe». Плотная ткань, карго-карманы, тот же свободный крой до колена. Расцветка, которая ловит взгляды на районе и не теряется на бетоне.</p>
-            <dl class="specs">
-              <dt>Крой</dt><dd>Baggy / knee</dd>
-              <dt>Карманы</dt><dd>Cargo</dd>
-              <dt>Цвет</dt><dd>Tiger camo</dd>
-            </dl>
+            <div class="card__head"><div class="card__name">Shorts — Mascot</div><div class="card__price">99 BYN</div></div>
+            <p class="card__desc">Чёрные бэгги-шорты с фирменным маскотом «тыква-ведьма SPW» и декоративной строчкой-стежками. Тот же широкий силуэт до колена, плотная ткань. Y2K-вайб на каждый день.</p>
+            <dl class="specs"><dt>Крой</dt><dd>Baggy / knee</dd><dt>Деталь</dt><dd>Mascot embroidery</dd><dt>Цвет</dt><dd>Washed black</dd></dl>
             <div class="card__foot"><div class="sizes"><span>XS</span><span>S</span><span>M</span><span>L</span><span>XL</span><span>XXL</span></div></div>
             <button class="btn order-btn">Заказать <span class="arr">→</span></button>
           </div>
         </article>
 
-        <!-- 03 DIGITAL CAMO -->
-        <article class="card" data-product="SPW SHORTS — DIGITAL CAMO" data-price="109 BYN" data-sizes="XS,S,M,L,XL,XXL">
+        <!-- 03 -->
+        <article class="card" data-product="SPW SHORTS — WHITE" data-price="99 BYN" data-sizes="XS,S,M,L,XL,XXL">
           <div class="card__media">
-            <img src="images/camo-digital.jpg" alt="SPW Digital Camo Shorts" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
+            <img src="images/photo_2026-06-17_18-54-43.jpg" alt="SPW White Shorts" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
             <span class="card__num">03</span>
             <span class="card__status in">В наличии</span>
-            <div class="card__ph"><div class="pmark">[ ФОТО ]</div><div class="pnote">images/camo-digital.jpg</div></div>
+            <div class="card__ph"><div class="pmark">[ ФОТО ]</div></div>
           </div>
           <div class="card__body">
-            <div class="card__head">
-              <div class="card__name">Shorts — Digital Camo</div>
-              <div class="card__price">109 BYN</div>
-            </div>
-            <p class="card__desc">Камуфляж «digital» — синий и серый ACU-пиксель на выбор. Бэгги-силуэт до колена, плотная ткань, карманы. Расцветки ограниченной партии — как разойдётся, ждём рестока.</p>
-            <dl class="specs">
-              <dt>Крой</dt><dd>Baggy / knee</dd>
-              <dt>Варианты</dt><dd>Blue / ACU grey</dd>
-              <dt>Цвет</dt><dd>Digital camo</dd>
-            </dl>
+            <div class="card__head"><div class="card__name">Shorts — White</div><div class="card__price">99 BYN</div></div>
+            <p class="card__desc">Белые бэгги-джорты с маскотом SPW и контрастной строчкой. Светлая база под любой верх — худи, джерси, ветровку. Маркие, но эффектные: для тех, кто не боится белого на скейте.</p>
+            <dl class="specs"><dt>Крой</dt><dd>Baggy / knee</dd><dt>Деталь</dt><dd>Mascot embroidery</dd><dt>Цвет</dt><dd>White</dd></dl>
             <div class="card__foot"><div class="sizes"><span>XS</span><span>S</span><span>M</span><span>L</span><span>XL</span><span>XXL</span></div></div>
             <button class="btn order-btn">Заказать <span class="arr">→</span></button>
           </div>
         </article>
 
-        <!-- 04 PANTS -->
-        <article class="card" data-product="SPW PANTS — BLACK" data-price="129 BYN" data-sizes="XS,S,M,L,XL,XXL">
+        <!-- 04 -->
+        <article class="card" data-product="SPW SHORTS — BLUE DENIM" data-price="105 BYN" data-sizes="XS,S,M,L,XL,XXL">
           <div class="card__media">
-            <img src="images/pants.jpg" alt="SPW Baggy Pants" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
+            <img src="images/photo_2026-06-17_18-54-47.jpg" alt="SPW Blue Denim Shorts" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
             <span class="card__num">04</span>
             <span class="card__status in">В наличии</span>
-            <div class="card__ph"><div class="pmark">[ ФОТО ]</div><div class="pnote">images/pants.jpg</div></div>
+            <div class="card__ph"><div class="pmark">[ ФОТО ]</div></div>
           </div>
           <div class="card__body">
-            <div class="card__head">
-              <div class="card__name">Pants — Black</div>
-              <div class="card__price">129 BYN</div>
-            </div>
-            <p class="card__desc">Полная длина — бэгги-штаны в том же характере, что и шорты. Плотный котон, широкий силуэт с заужением к низу, фирменная вышивка. Под зиму, под скейт, под весь СНГ. Размерная сетка штанов — в разделе «Размеры».</p>
-            <dl class="specs">
-              <dt>Крой</dt><dd>Baggy / tapered</dd>
-              <dt>Деталь</dt><dd>Graffiti embroidery</dd>
-              <dt>Цвет</dt><dd>Black</dd>
-            </dl>
+            <div class="card__head"><div class="card__name">Shorts — Denim</div><div class="card__price">105 BYN</div></div>
+            <p class="card__desc">Джинсовые бэгги-джорты в среднем индиго с маскотом SPW. Настоящий деним, широкая штанина до колена, задние карманы. Классика Y2K в исполнении из Минска.</p>
+            <dl class="specs"><dt>Крой</dt><dd>Baggy / knee</dd><dt>Ткань</dt><dd>Denim</dd><dt>Цвет</dt><dd>Mid indigo</dd></dl>
+            <div class="card__foot"><div class="sizes"><span>XS</span><span>S</span><span>M</span><span>L</span><span>XL</span><span>XXL</span></div></div>
+            <button class="btn order-btn">Заказать <span class="arr">→</span></button>
+          </div>
+        </article>
+
+        <!-- 05 -->
+        <article class="card" data-product="SPW SHORTS — CAMO" data-price="109 BYN" data-sizes="XS,S,M,L,XL,XXL">
+          <div class="card__media">
+            <img src="images/photo_2026-06-17_18-55-03.jpg" alt="SPW Camo Shorts" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
+            <span class="card__num">05</span>
+            <span class="card__status in">В наличии</span>
+            <div class="card__ph"><div class="pmark">[ ФОТО ]</div></div>
+          </div>
+          <div class="card__body">
+            <div class="card__head"><div class="card__name">Shorts — Camo</div><div class="card__price">109 BYN</div></div>
+            <p class="card__desc">Бэгги-шорты в камуфляже: woodland, forest, tiger и digital на выбор. Плотная ткань, карго-карманы, тот же свободный крой до колена. Расцветки ограниченной партии.</p>
+            <dl class="specs"><dt>Крой</dt><dd>Baggy / knee</dd><dt>Варианты</dt><dd>Woodland / tiger / digital</dd><dt>Цвет</dt><dd>Camo</dd></dl>
+            <div class="card__foot"><div class="sizes"><span>XS</span><span>S</span><span>M</span><span>L</span><span>XL</span><span>XXL</span></div></div>
+            <button class="btn order-btn">Заказать <span class="arr">→</span></button>
+          </div>
+        </article>
+
+        <!-- 06 -->
+        <article class="card" data-product="SPW BAGGY JEANS — BLUE" data-price="129 BYN" data-sizes="XS,S,M,L,XL,XXL">
+          <div class="card__media">
+            <img src="images/photo_2026-06-17_18-54-06.jpg" alt="SPW Baggy Jeans" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
+            <span class="card__num">06</span>
+            <span class="card__status in">В наличии</span>
+            <div class="card__ph"><div class="pmark">[ ФОТО ]</div></div>
+          </div>
+          <div class="card__body">
+            <div class="card__head"><div class="card__name">Baggy Jeans</div><div class="card__price">129 BYN</div></div>
+            <p class="card__desc">Полноразмерные бэгги-джинсы в синем индиго с фирменной графикой на штанине. Очень широкая нога, мягкий деним, заводская стирка. Главная вещь под зиму и круглый год. Сетка — в разделе «Размеры → Штаны».</p>
+            <dl class="specs"><dt>Крой</dt><dd>Baggy / wide</dd><dt>Ткань</dt><dd>Denim</dd><dt>Цвет</dt><dd>Blue indigo</dd></dl>
             <div class="card__foot"><div class="sizes"><span>XS</span><span>S</span><span>M</span><span>L</span><span>XL</span><span>XXL</span></div></div>
             <button class="btn order-btn">Заказать <span class="arr">→</span></button>
           </div>
@@ -495,24 +477,17 @@
   <!-- SIZES -->
   <section class="block" id="sizes">
     <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="idx">[ 03 ]</span>
-        <h2>Размеры</h2>
-      </div>
-
+      <div class="sec-head reveal"><span class="idx">[ 03 ]</span><h2>Размеры</h2></div>
       <div class="reveal">
         <div class="size-tabs" role="tablist">
           <button class="size-tab active" data-t="shorts" role="tab">Шорты</button>
-          <button class="size-tab" data-t="pants" role="tab">Штаны</button>
+          <button class="size-tab" data-t="pants" role="tab">Штаны / Джинсы</button>
         </div>
 
-        <!-- SHORTS -->
         <div class="size-panel" data-table="shorts">
           <div class="size-layout">
             <table class="size">
-              <thead>
-                <tr><th>size, cm</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th></tr>
-              </thead>
+              <thead><tr><th>size, cm</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th></tr></thead>
               <tbody>
                 <tr><th>A — пояс</th><td>36</td><td>39</td><td>44</td><td>46</td><td>48</td><td>51</td></tr>
                 <tr><th>B — низ</th><td>36</td><td>37</td><td>38</td><td>39</td><td>39</td><td>40</td></tr>
@@ -523,18 +498,15 @@
               <div class="lg"><b>A</b><span>Пояс — ширина по поясу (в разложенном виде, см)</span></div>
               <div class="lg"><b>B</b><span>Низ — ширина штанины по низу (см)</span></div>
               <div class="lg"><b>C</b><span>Длина — общая длина изделия (см)</span></div>
-              <p class="size-note">↑ Замеры в сантиметрах. Все шорты — бэгги-крой. Сомневаешься между размерами — пиши в Telegram, подскажем.</p>
+              <p class="size-note">↑ Замеры в сантиметрах. Все шорты — бэгги-крой. Сомневаешься между размерами — пиши в Telegram.</p>
             </div>
           </div>
         </div>
 
-        <!-- PANTS -->
         <div class="size-panel" data-table="pants" hidden>
           <div class="size-layout">
             <table class="size">
-              <thead>
-                <tr><th>size, cm</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th></tr>
-              </thead>
+              <thead><tr><th>size, cm</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th></tr></thead>
               <tbody>
                 <tr><th>A — пояс</th><td>36</td><td>39</td><td>41</td><td>44</td><td>48</td><td>52</td></tr>
                 <tr><th>B — низ</th><td>37</td><td>38</td><td>38</td><td>39</td><td>39</td><td>40</td></tr>
@@ -545,7 +517,7 @@
               <div class="lg"><b>A</b><span>Пояс — ширина по поясу (в разложенном виде, см)</span></div>
               <div class="lg"><b>B</b><span>Низ — ширина штанины по низу (см)</span></div>
               <div class="lg"><b>C</b><span>Длина — общая длина изделия (см)</span></div>
-              <p class="size-note">↑ Замеры в сантиметрах. Штаны — бэгги с заужением к низу.</p>
+              <p class="size-note">↑ Замеры в сантиметрах. Штаны и джинсы — бэгги с заужением к низу.</p>
             </div>
           </div>
         </div>
@@ -556,34 +528,21 @@
   <!-- LOOKBOOK -->
   <section class="block" id="lookbook">
     <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="idx">[ 04 ]</span>
-        <h2>Lookbook</h2>
-      </div>
+      <div class="sec-head reveal"><span class="idx">[ 04 ]</span><h2>Lookbook</h2></div>
       <div class="lookbook-grid stagger">
         <div class="look">
-          <img src="images/look-camo.jpg" alt="SPW camo lookbook" loading="lazy" onerror="this.classList.add('img-missing')" />
-          <div class="l-fill">
-            <span class="l-idx">LB / 01</span>
-            <div><div class="l-cap">Камо<br>линейка</div><span class="l-slot">[ images/look-camo.jpg ]</span></div>
-          </div>
+          <img src="images/photo_2026-06-17_18-55-17.jpg" alt="SPW black graffiti shorts on rail" loading="lazy" onerror="this.classList.add('img-missing')" />
+          <div class="l-fill"><span class="l-idx">LB / 01</span><div class="l-cap">Graffiti<br>shorts</div></div>
         </div>
         <div class="look">
-          <img src="images/look-black.jpg" alt="SPW black shorts lookbook" loading="lazy" onerror="this.classList.add('img-missing')" />
-          <div class="l-fill">
-            <span class="l-idx">LB / 02</span>
-            <div><div class="l-cap">Чёрные<br>шорты</div><span class="l-slot">[ images/look-black.jpg ]</span></div>
-          </div>
+          <img src="images/photo_2026-06-17_18-54-56.jpg" alt="SPW white pants sunset" loading="lazy" onerror="this.classList.add('img-missing')" />
+          <div class="l-fill"><span class="l-idx">LB / 02</span><div class="l-cap">White<br>baggy</div></div>
         </div>
         <div class="look">
-          <img src="images/look-park.jpg" alt="SPW skatepark lookbook" loading="lazy" onerror="this.classList.add('img-missing')" />
-          <div class="l-fill">
-            <span class="l-idx">LB / 03</span>
-            <div><div class="l-cap">Двор<br>SS26</div><span class="l-slot">[ images/look-park.jpg ]</span></div>
-          </div>
+          <img src="images/photo_2026-06-17_18-54-24.jpg" alt="SPW camo lookbook" loading="lazy" onerror="this.classList.add('img-missing')" />
+          <div class="l-fill"><span class="l-idx">LB / 03</span><div class="l-cap">Двор<br>SS26</div></div>
         </div>
       </div>
-      <p class="mono-label reveal" style="margin-top:18px;">↑ Слоты под съёмку — фото подставятся автоматически, как положишь их в папку images/.</p>
     </div>
   </section>
 
@@ -595,8 +554,12 @@
         <div class="about-text reveal">
           <p class="pull">Мы из Минска. Делаем форму для своих.</p>
           <p><b>SPW (Skatepark Wear)</b> — это не «ещё один мерч». Бренд собрался вокруг минского скейтпарка и тусовки, где скейт, рэп и двор — одно целое. Сначала шили для себя и пацанов с района, потом за вещами начали писать из других городов.</p>
-          <p>Фишка — <b>бэгги-крой</b>: широкие шорты и штаны, которые не сковывают на доске. Камуфляжные расцветки, чёрные шорты с фирменной граффити-вышивкой «Skatepark Wear». Берём плотные ткани и отшиваем ограниченными партиями — ходовые размеры разлетаются быстро.</p>
+          <p>Фишка — <b>бэгги-крой</b>: широченные джинсы, шорты-джорты и штаны, которые не сковывают на доске. Камуфляж, деним, чёрный и белый котон, фирменная вышивка-маскот «тыква-ведьма» и граффити «Skatepark Wear». Отшиваем ограниченными партиями — ходовые размеры разлетаются быстро.</p>
           <p>Следи за новыми дропами и рестоками в <b>TikTok</b> и <b>Instagram</b> — там первыми показываем съёмки и анонсы.</p>
+          <div class="about-mascot">
+            <img src="images/photo_2026-06-17_18-54-34.jpg" alt="SPW mascot" onerror="this.style.display='none'" />
+            <div class="mtxt"><b>SPW MASCOT</b><br>Тыква-ведьма и дым «SPW» — фирменный знак бренда, который ты найдёшь на вышивке.</div>
+          </div>
         </div>
         <div class="facts reveal">
           <div class="fact"><span class="f-no">01</span><div><div class="f-title">Сделано в Минске</div><div class="f-text">Отшиваем локально, контролируем каждую партию.</div></div></div>
@@ -615,7 +578,7 @@
       <div class="faq reveal">
         <details open><summary>Куда доставляете? <span class="plus">+</span></summary><div class="answer">Доставка по Беларуси и странам СНГ (Россия, Казахстан и др.). Украина, Польша и Литва в зону доставки не входят.</div></details>
         <details><summary>Как оформить заказ? <span class="plus">+</span></summary><div class="answer">Нажми «Заказать» на нужной позиции, заполни форму (имя, контакт, размер) — заявка уйдёт нам в Telegram. Мы свяжемся, подтвердим наличие, размер и согласуем доставку и оплату.</div></details>
-        <details><summary>Как выбрать размер? <span class="plus">+</span></summary><div class="answer">Сверься с разделом «Размеры» — там реальные замеры в см по шортам и штанам (A — пояс, B — низ штанины, C — длина). Сомневаешься между размерами — напиши нам в Telegram или Instagram.</div></details>
+        <details><summary>Как выбрать размер? <span class="plus">+</span></summary><div class="answer">Сверься с разделом «Размеры» — там реальные замеры в см по шортам и штанам/джинсам (A — пояс, B — низ штанины, C — длина). Сомневаешься между размерами — напиши нам в Telegram или Instagram.</div></details>
         <details><summary>Когда будет ресток? <span class="plus">+</span></summary><div class="answer">Дропы и рестоки анонсируем первыми в TikTok и Instagram <b>@_skatepark.wear</b>. Подпишись, чтобы не пропустить — ходовые размеры уходят быстро.</div></details>
       </div>
     </div>
@@ -648,7 +611,6 @@
     </div>
   </footer>
 
-  <!-- BACK TO TOP -->
   <button class="to-top" id="toTop" aria-label="Наверх">↑</button>
 
   <!-- MODAL -->
@@ -670,45 +632,40 @@
   </div>
 
 <script>
-  // ---------- Loader ----------
+  // Loader
   (function () {
-    var loader = document.getElementById('loader');
-    if (!loader) return;
+    var loader = document.getElementById('loader'); if (!loader) return;
     var bar = document.getElementById('lbar'), count = document.getElementById('lcount'), p = 0;
     var iv = setInterval(function () {
       p += Math.random() * 18 + 7;
       if (p >= 100) { p = 100; clearInterval(iv); setTimeout(finish, 220); }
-      bar.style.width = p + '%';
-      count.textContent = ('00' + Math.floor(p)).slice(-3);
+      bar.style.width = p + '%'; count.textContent = ('00' + Math.floor(p)).slice(-3);
     }, 100);
     function finish () { loader.classList.add('done'); setTimeout(function () { loader.style.display = 'none'; }, 750); }
     setTimeout(function () { if (loader.style.display !== 'none') finish(); }, 3500);
   })();
 
-  // ---------- Mobile nav ----------
+  // Mobile nav
   (function () {
-    var nav = document.getElementById('nav'), burger = document.getElementById('burger');
-    if (!burger) return;
+    var nav = document.getElementById('nav'), burger = document.getElementById('burger'); if (!burger) return;
     burger.addEventListener('click', function () { nav.classList.toggle('open'); });
     nav.querySelectorAll('.nav__links a').forEach(function (a) { a.addEventListener('click', function () { nav.classList.remove('open'); }); });
   })();
 
-  // ---------- Scroll progress + back-to-top ----------
+  // Scroll progress + back-to-top
   (function () {
     var bar = document.getElementById('progress'), top = document.getElementById('toTop');
     function onScroll () {
-      var h = document.documentElement, st = h.scrollTop || document.body.scrollTop;
-      var max = h.scrollHeight - h.clientHeight;
+      var h = document.documentElement, st = h.scrollTop || document.body.scrollTop, max = h.scrollHeight - h.clientHeight;
       var pct = max > 0 ? (st / max) * 100 : 0;
       if (bar) bar.style.width = pct + '%';
       if (top) top.classList.toggle('show', st > 500);
     }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
     if (top) top.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
   })();
 
-  // ---------- Reveal on scroll ----------
+  // Reveal
   (function () {
     var els = document.querySelectorAll('.reveal, .stagger');
     if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('visible'); }); return; }
@@ -718,40 +675,34 @@
     els.forEach(function (e) { io.observe(e); });
   })();
 
-  // ---------- Size tabs ----------
+  // Size tabs
   (function () {
     var tabs = document.querySelectorAll('.size-tab'), panels = document.querySelectorAll('.size-panel');
     tabs.forEach(function (tab) {
       tab.addEventListener('click', function () {
-        tabs.forEach(function (t) { t.classList.remove('active'); });
-        tab.classList.add('active');
+        tabs.forEach(function (t) { t.classList.remove('active'); }); tab.classList.add('active');
         var t = tab.getAttribute('data-t');
         panels.forEach(function (pn) { pn.hidden = (pn.getAttribute('data-table') !== t); });
       });
     });
   })();
 
-  // ---------- Order modal ----------
+  // Order modal
   (function () {
     var overlay = document.getElementById('overlay'), closeBtn = document.getElementById('modalClose');
     var title = document.getElementById('modalTitle'), price = document.getElementById('modalPrice');
     var sizeSelect = document.getElementById('f-size'), form = document.getElementById('orderForm');
     var TG_URL = 'https://t.me/_skateparkwear', lastFocused = null;
-
     function openModal (product, priceStr, sizes) {
-      lastFocused = document.activeElement;
-      title.textContent = product; price.textContent = priceStr;
+      lastFocused = document.activeElement; title.textContent = product; price.textContent = priceStr;
       sizeSelect.innerHTML = '';
       sizes.split(',').forEach(function (s) { var o = document.createElement('option'); o.value = s; o.textContent = s; sizeSelect.appendChild(o); });
-      overlay.classList.add('open'); document.body.style.overflow = 'hidden';
-      document.getElementById('f-name').focus();
+      overlay.classList.add('open'); document.body.style.overflow = 'hidden'; document.getElementById('f-name').focus();
     }
     function closeModal () { overlay.classList.remove('open'); document.body.style.overflow = ''; if (lastFocused) lastFocused.focus(); }
-
     document.querySelectorAll('.order-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        if (btn.disabled) return;
-        var card = btn.closest('.card');
+        if (btn.disabled) return; var card = btn.closest('.card');
         openModal(card.getAttribute('data-product'), card.getAttribute('data-price'), card.getAttribute('data-sizes'));
       });
     });
