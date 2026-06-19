@@ -720,9 +720,7 @@ footer{border-top:1px solid var(--border);padding:54px 0 30px;text-align:center}
     <div class="filters reveal" id="filters">
       <button class="filter active" data-f="all">Все</button>
       <button class="filter" data-f="disks">Диски</button>
-      <button class="filter" data-f="body">Обвесы</button>
       <button class="filter" data-f="wheel">Рули</button>
-      <button class="filter" data-f="interior">Интерьер</button>
     </div>
     <div class="gallery reveal" id="gallery"></div>
   </div>
@@ -999,29 +997,40 @@ footer{border-top:1px solid var(--border);padding:54px 0 30px;text-align:center}
   tw.appendChild(mkRow(brands.slice(0,10),'row1'));
   tw.appendChild(mkRow(brands.slice(10),'row2'));
 
-  /* ---- Portfolio grid (work-1.jpg..work-12.jpg, graceful placeholder) ---- */
-  const cats=['disks','body','wheel','interior'];
-  const catRu={disks:'Диски',body:'Обвесы',wheel:'Рули',interior:'Интерьер'};
+  /* ---- Portfolio grid (real project photos) ---- */
+  const catRu={disks:'Диски',wheel:'Рули'};
+  const P='images/';
+  const works=[
+    {f:'photo_5_2026-06-19_18-51-33.jpg',  cat:'disks', t:'Ferrari 458 · HRE'},
+    {f:'photo_6_2026-06-19_18-51-33.jpg',  cat:'disks', t:'Tesla Model S'},
+    {f:'photo_8_2026-06-19_18-51-33.jpg',  cat:'disks', t:'Mercedes S63 · HRE'},
+    {f:'photo_1_2026-06-19_18-51-33.jpg',  cat:'disks', t:'Vossen · ковка'},
+    {f:'photo_4_2026-06-19_18-51-33.jpg',  cat:'disks', t:'BBS · ковка'},
+    {f:'photo_7_2026-06-19_18-51-33.jpg',  cat:'disks', t:'OZ Racing · forged'},
+    {f:'photo_2_2026-06-19_18-51-33.jpg',  cat:'disks', t:'Concave · gunmetal'},
+    {f:'photo_9_2026-06-19_18-51-33.jpg',  cat:'wheel', t:'BMW M · карбон'},
+    {f:'photo_12_2026-06-19_18-51-33.jpg', cat:'wheel', t:'BMW M · карбон'},
+    {f:'photo_10_2026-06-19_18-51-33.jpg', cat:'wheel', t:'BMW M · алькантара'},
+    {f:'photo_13_2026-06-19_18-51-33.jpg', cat:'wheel', t:'BMW · алькантара'},
+    {f:'photo_14_2026-06-19_18-51-33.jpg', cat:'wheel', t:'Audi RS · карбон'},
+    {f:'photo_19_2026-06-19_18-51-33.jpg', cat:'wheel', t:'VW Golf GTI'},
+    {f:'photo_20_2026-06-19_18-51-33.jpg', cat:'wheel', t:'VW R-Line'}
+  ];
   const gallery=$('#gallery');
   const items=[];
-  const ovHTML=(i,cat)=>'<div class="ov"><div><small>'+catRu[cat]+'</small><span>Проект #'+i+'</span></div></div>';
-  for(let i=1;i<=12;i++){
-    const cat=cats[(i-1)%cats.length];
+  const ovHTML=w=>'<div class="ov"><div><small>'+catRu[w.cat]+'</small><span>'+w.t+'</span></div></div>';
+  works.forEach((w,idx)=>{
     const card=document.createElement('div');
-    card.className='shot';card.dataset.cat=cat;card.dataset.n=i;card.dataset.ph='0';
+    card.className='shot';card.dataset.cat=w.cat;
     const img=new Image();
-    img.loading='lazy';img.alt='Проект #'+i+' — '+catRu[cat];
-    img.onerror=()=>{
-      card.dataset.ph='1';
-      card.innerHTML='<div class="ph"><span class="pm">PW</span><small>ПРОЕКТ #'+i+'</small></div>'+ovHTML(i,cat);
-    };
-    img.src='images/work-'+i+'.jpg';
+    img.loading='lazy';img.alt=w.t+' — '+catRu[w.cat];
+    img.src=P+w.f;
     card.appendChild(img);
-    card.insertAdjacentHTML('beforeend',ovHTML(i,cat));
-    card.addEventListener('click',()=>openLb(i));
+    card.insertAdjacentHTML('beforeend',ovHTML(w));
+    card.addEventListener('click',()=>openLb(idx));
     gallery.appendChild(card);
-    items.push({n:i,cat:cat,card:card});
-  }
+    items.push({i:idx,cat:w.cat,file:w.f,title:w.t,card:card});
+  });
 
   /* filters */
   $('#filters').addEventListener('click',e=>{
@@ -1038,17 +1047,15 @@ footer{border-top:1px solid var(--border);padding:54px 0 30px;text-align:center}
     const f=$('.filter.active').dataset.f;
     return items.filter(it=>f==='all'||it.cat===f);
   };
-  function openLb(n){
+  function openLb(i){
     visible=visibleItems();
-    pos=visible.findIndex(it=>it.n===n);if(pos<0)pos=0;
+    pos=visible.findIndex(it=>it.i===i);if(pos<0)pos=0;
     render();lb.classList.add('open');lb.setAttribute('aria-hidden','false');
   }
   function render(){
     const it=visible[pos];
-    stage.innerHTML = it.card.dataset.ph==='1'
-      ? '<div class="lb-ph">PW</div>'
-      : '<img src="images/work-'+it.n+'.jpg" alt="Проект #'+it.n+'">';
-    count.textContent='Проект #'+it.n+'  ·  '+(pos+1)+' / '+visible.length;
+    stage.innerHTML='<img src="'+P+it.file+'" alt="'+it.title+'">';
+    count.textContent=it.title+'  ·  '+(pos+1)+' / '+visible.length;
   }
   const move=d=>{pos=(pos+d+visible.length)%visible.length;render();};
   $('#lbNext').addEventListener('click',()=>move(1));
