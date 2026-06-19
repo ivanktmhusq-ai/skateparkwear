@@ -293,6 +293,14 @@ section[id]{scroll-margin-top:72px}
   display:inline-flex;align-items:center;gap:7px;
 }
 .svc-order:hover{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 6px 22px var(--accent-dim)}
+/* per-card photo background, darkened for legibility */
+.svc>.svc-photo{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(180deg,rgba(17,17,17,.80),rgba(17,17,17,.93)),var(--img);
+  background-size:cover;background-position:center;filter:grayscale(.15);
+  transition:background-image .3s var(--ease);
+}
+.svc:hover>.svc-photo{background-image:linear-gradient(180deg,rgba(17,17,17,.62),rgba(17,17,17,.85)),var(--img)}
 @media(max-width:880px){.svc-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.svc-grid{grid-template-columns:1fr}}
 
@@ -653,37 +661,37 @@ footer{border-top:1px solid var(--border);padding:54px 0 30px;text-align:center}
       <h2 class="h2">Что мы <span>делаем</span></h2>
     </div>
     <div class="svc-grid">
-      <div class="svc reveal"><span class="idx">01</span>
+      <div class="svc reveal"><span class="svc-photo" style="--img:url(images/photo_4_2026-06-19_18-51-33.jpg)"></span><span class="idx">01</span>
         <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><circle cx="24" cy="24" r="20"/><circle cx="24" cy="24" r="6"/><path d="M24 4v12M44 24H32M24 44V32M4 24h12"/></svg>
         <h3>Диски под заказ</h3>
         <p>Литые, кованые, реплики. Любые размеры от R16 до R22+. Подбор под параметры авто.</p>
         <button class="svc-order" data-svc="Диски под заказ">Заказать →</button>
       </div>
-      <div class="svc reveal"><span class="idx">02</span>
+      <div class="svc reveal"><span class="svc-photo" style="--img:url(images/photo_5_2026-06-19_18-51-33.jpg)"></span><span class="idx">02</span>
         <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 30l6-12h28l6 12M4 30h40v6H4z"/><path d="M10 18l4-6h20l4 6"/><circle cx="14" cy="36" r="3"/><circle cx="34" cy="36" r="3"/></svg>
         <h3>Обвесы и аэродинамика</h3>
         <p>Бамперы, сплиттеры, диффузоры, пороги, спойлеры. Любой стиль.</p>
         <button class="svc-order" data-svc="Обвесы и аэродинамика">Заказать →</button>
       </div>
-      <div class="svc reveal"><span class="idx">03</span>
+      <div class="svc reveal"><span class="svc-photo" style="--img:url(images/photo_12_2026-06-19_18-51-33.jpg)"></span><span class="idx">03</span>
         <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><circle cx="24" cy="24" r="20"/><circle cx="24" cy="24" r="5"/><path d="M9 24h10M29 24h10M24 9v6"/></svg>
         <h3>Рули и интерьер</h3>
         <p>Спортивные рули, накладки, карбоновые детали салона.</p>
         <button class="svc-order" data-svc="Рули и интерьер">Заказать →</button>
       </div>
-      <div class="svc reveal"><span class="idx">04</span>
+      <div class="svc reveal"><span class="svc-photo" style="--img:url(images/photo_6_2026-06-19_18-51-33.jpg)"></span><span class="idx">04</span>
         <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M24 6v10M24 32v10"/><rect x="16" y="16" width="16" height="16" rx="2"/><path d="M12 16h-4M40 16h-4M12 32H8M40 32h-4"/></svg>
         <h3>Подвеска и проставки</h3>
         <p>Проставки колёс, занижение, пружины, стойки.</p>
         <button class="svc-order" data-svc="Подвеска и проставки">Заказать →</button>
       </div>
-      <div class="svc reveal"><span class="idx">05</span>
+      <div class="svc reveal"><span class="svc-photo" style="--img:url(images/photo_8_2026-06-19_18-51-33.jpg)"></span><span class="idx">05</span>
         <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 28h22c4 0 6-2 8-4l6-4M6 28v6h18"/><circle cx="40" cy="20" r="3"/><path d="M6 28c-2 0-2-6 2-6h16"/></svg>
         <h3>Выхлопные системы</h3>
         <p>Насадки, прямотоки, спортивные глушители.</p>
         <button class="svc-order" data-svc="Выхлопные системы">Заказать →</button>
       </div>
-      <div class="svc reveal"><span class="idx">06</span>
+      <div class="svc reveal"><span class="svc-photo" style="--img:url(images/photo_7_2026-06-19_18-51-33.jpg)"></span><span class="idx">06</span>
         <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M8 10h32v22H26l-8 8v-8H8z"/><path d="M16 18h16M16 24h10"/></svg>
         <h3>Консультация и подбор</h3>
         <p>Бесплатная помощь в подборе под ваш автомобиль и бюджет.</p>
