@@ -3,759 +3,1112 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Skatepark Wear</title>
-<meta name="description" content="SPW — Skatepark Wear. Бэгги-джинсы, шорты и штаны из Минска. Скейт, двор, рэп. Доставка по РБ и СНГ." />
+<title>Phantom Wheels — Делаем тачки злее. Диски, обвесы и тюнинг под заказ из Китая</title>
+<meta name="description" content="Phantom Wheels — персональный подбор дисков, обвесов и тюнинга из Китая под заказ. Беларусь, доставка по СНГ. Делаем тачки злее." />
+
+<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
 <style>
-  :root {
-    --paper:  #E7E5DF;
-    --card:   #EFEDE8;
-    --ink:    #121211;
-    --steel:  #2A2A28;
-    --line:   #C8C4B8;
-    --accent: #1B3CFF;
-    --muted:  #807C73;
+/* ============================================================
+   PHANTOM WHEELS — single-file storefront
+   Vanilla HTML + CSS + JS. Dark automotive luxury aesthetic.
+   ============================================================ */
+
+:root{
+  /* Palette */
+  --bg:#0A0A0A;
+  --surface:#111111;
+  --surface-2:#161616;
+  --accent:#7B4FFF;
+  --accent-dim:rgba(123,79,255,.30);
+  --accent-glow:rgba(123,79,255,.45);
+  --chrome:#C0C0C0;
+  --text:#F0F0F0;
+  --muted:#666666;
+  --border:#222222;
+  --border-2:#333333;
+
+  /* Type */
+  --f-display:'Bebas Neue', 'Rajdhani', sans-serif;
+  --f-head:'Rajdhani', sans-serif;
+  --f-body:'Inter', sans-serif;
+  --f-mono:'JetBrains Mono', monospace;
+
+  /* Misc */
+  --maxw:1200px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--f-body);
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer}
+section{position:relative}
+::selection{background:var(--accent);color:#fff}
+
+/* ---------- Noise texture overlay ---------- */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:9000;
+  pointer-events:none;
+  opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- Scroll progress bar ---------- */
+#progress{
+  position:fixed;top:0;left:0;height:3px;width:0;z-index:9500;
+  background:linear-gradient(90deg,var(--accent),#a98bff);
+  box-shadow:0 0 12px var(--accent-glow);
+  transition:width .1s linear;
+}
+
+/* ---------- Loading screen ---------- */
+#loader{
+  position:fixed;inset:0;z-index:10000;background:#000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+  transition:opacity .6s ease,visibility .6s;
+}
+#loader.hide{opacity:0;visibility:hidden}
+#loader .spin{width:90px;height:90px;animation:spin 1.1s linear infinite}
+#loader .lbl{
+  font-family:var(--f-mono);font-size:.7rem;letter-spacing:.35em;color:var(--muted);
+  text-transform:uppercase;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:8000;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(10,10,10,.55);
+  border-bottom:1px solid var(--border);
+  transition:background .3s,border-color .3s;
+}
+.nav{
+  max-width:var(--maxw);margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--f-display);letter-spacing:.04em}
+.brand .mark{
+  width:38px;height:38px;border:1.5px solid var(--accent);border-radius:50%;
+  display:grid;place-items:center;font-size:1.05rem;color:var(--accent);
+  box-shadow:0 0 14px var(--accent-dim) inset;
+}
+.brand .name{font-size:1.5rem;line-height:1}
+.brand .name span{color:var(--accent)}
+nav.links{display:flex;gap:6px;align-items:center}
+nav.links a{
+  font-family:var(--f-head);font-weight:600;font-size:.86rem;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);padding:8px 13px;border-radius:6px;
+  position:relative;transition:color .2s;
+}
+nav.links a:hover{color:var(--text)}
+nav.links a.active{color:var(--text)}
+nav.links a.active::after{
+  content:"";position:absolute;left:13px;right:13px;bottom:2px;height:2px;
+  background:var(--accent);box-shadow:0 0 8px var(--accent-glow);border-radius:2px;
+}
+.nav-tg{
+  font-family:var(--f-head);font-weight:600;font-size:.85rem;letter-spacing:.04em;
+  border:1px solid var(--accent);color:var(--text);padding:8px 16px;border-radius:7px;
+  transition:background .2s,box-shadow .2s;text-transform:uppercase;
+}
+.nav-tg:hover{background:var(--accent);box-shadow:0 0 20px var(--accent-dim)}
+.burger{display:none;flex-direction:column;gap:5px;background:none;border:0;padding:6px}
+.burger span{width:24px;height:2px;background:var(--text);transition:.3s}
+
+@media(max-width:920px){
+  nav.links{
+    position:fixed;top:0;right:0;height:100vh;width:min(80vw,320px);
+    flex-direction:column;align-items:flex-start;gap:4px;padding:90px 28px;
+    background:rgba(12,12,12,.97);backdrop-filter:blur(20px);
+    border-left:1px solid var(--border);
+    transform:translateX(100%);transition:transform .35s var(--ease);
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { background: var(--paper); color: var(--ink); font-family: 'Inter', sans-serif; font-weight: 400; overflow-x: hidden; -webkit-font-smoothing: antialiased; line-height: 1.5; }
-  ::selection { background: var(--accent); color: #fff; }
-  a { color: inherit; text-decoration: none; }
-  img { display: block; max-width: 100%; }
-  .display { font-family: 'Archivo', sans-serif; text-transform: uppercase; }
-  .mono { font-family: 'Space Mono', monospace; }
-  .wrap { max-width: 1320px; margin: 0 auto; padding: 0 28px; }
-  .mono-label { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+  nav.links.open{transform:translateX(0)}
+  nav.links a{font-size:1.1rem;padding:12px 0}
+  .burger{display:flex;z-index:8100}
+  .nav-tg{display:none}
+}
 
-  /* SCROLL PROGRESS */
-  .scroll-progress { position: fixed; top:0; left:0; height:3px; width:0; background: var(--accent); z-index:1800; transition: width .1s linear; }
+/* ============================================================
+   SHARED SECTION CHROME
+   ============================================================ */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.sec{padding:110px 0}
+section[id]{scroll-margin-top:72px}
+.label{
+  font-family:var(--f-mono);font-size:.72rem;letter-spacing:.3em;color:var(--accent);
+  text-transform:uppercase;margin-bottom:18px;display:inline-block;
+}
+.h2{
+  font-family:var(--f-display);font-size:clamp(2.4rem,6vw,4rem);line-height:.95;
+  letter-spacing:.02em;
+}
+.h2 span{color:var(--accent)}
+.lede{color:var(--muted);max-width:60ch;margin-top:16px;font-size:1.02rem}
 
-  /* LOADER */
-  #loader { position: fixed; inset:0; z-index:2000; background: var(--steel); color: var(--paper); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; transition: transform .7s cubic-bezier(.76,0,.24,1); animation: loaderFailsafe .5s ease 3.2s forwards; }
-  @keyframes loaderFailsafe { to { opacity:0; visibility:hidden; pointer-events:none; } }
-  #loader.done { transform: translateY(-100%); animation:none; }
-  #loader .l-logo { font-family:'Archivo',sans-serif; font-weight:900; font-size: clamp(64px,16vw,180px); letter-spacing:.02em; line-height:1; overflow:hidden; }
-  #loader .l-logo span { display:inline-block; animation: rise .6s cubic-bezier(.2,.8,.2,1) both; }
-  #loader .l-logo span:nth-child(2){ animation-delay:.08s; }
-  #loader .l-logo span:nth-child(3){ animation-delay:.16s; }
-  @keyframes rise { from { transform: translateY(110%); } to { transform: translateY(0); } }
-  #loader .l-meta { font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.3em; text-transform:uppercase; display:flex; gap:14px; color:#9a968c; }
-  #loader .l-count { color: var(--accent); }
-  .l-bar { width:min(280px,60vw); height:2px; background:#45443f; overflow:hidden; }
-  .l-bar i { display:block; height:100%; width:0; background: var(--accent); transition: width .1s linear; }
+/* decorative divider with diamond */
+.divider{display:flex;align-items:center;gap:14px;margin:0 auto;max-width:var(--maxw);padding:0 24px}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--border)}
+.divider i{width:8px;height:8px;background:var(--accent);transform:rotate(45deg);box-shadow:0 0 10px var(--accent-glow)}
 
-  /* TICKER */
-  .ticker { background: var(--steel); color: var(--paper); overflow:hidden; white-space:nowrap; border-bottom:1px solid #000; }
-  .ticker__track { display:inline-flex; animation: tick 30s linear infinite; }
-  .ticker__track span { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; text-transform:uppercase; padding:9px 0; margin-right:36px; display:inline-flex; gap:36px; }
-  .ticker b { color: var(--accent); font-weight:400; }
-  @keyframes tick { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+/* reveal animation */
+.reveal{opacity:0;transform:translateY(34px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
 
-  /* NAV */
-  header.nav { position: sticky; top:0; z-index:900; background: rgba(231,229,223,.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom:1px solid var(--line); }
-  .nav__inner { display:flex; align-items:center; justify-content:space-between; height:64px; }
-  .nav__logo { font-family:'Archivo',sans-serif; font-weight:900; font-size:24px; letter-spacing:.04em; }
-  .nav__links { display:flex; gap:30px; }
-  .nav__links a { font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; position:relative; padding:4px 0; }
-  .nav__links a::after { content:""; position:absolute; left:0; bottom:0; height:1px; width:0; background: var(--accent); transition: width .25s ease; }
-  .nav__links a:hover::after { width:100%; }
-  .nav__cta { font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; border:1px solid var(--ink); padding:9px 16px; transition: background .2s,color .2s; }
-  .nav__cta:hover { background: var(--ink); color: var(--paper); }
-  .nav__burger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; }
-  .nav__burger span { width:24px; height:2px; background: var(--ink); transition: transform .3s, opacity .2s; }
-  .nav.open .nav__burger span:nth-child(1){ transform: translateY(7px) rotate(45deg); }
-  .nav.open .nav__burger span:nth-child(2){ opacity:0; }
-  .nav.open .nav__burger span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
+/* ============================================================
+   HERO
+   ============================================================ */
+#hero{height:100vh;min-height:640px;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.wheel-main{
+  position:absolute;top:50%;right:-14vmin;width:84vmin;height:84vmin;
+  transform:translateY(-50%);will-change:transform;
+}
+.wheel-main .rot{animation:wspin 24s linear infinite;transform-origin:50% 50%}
+.wheel-small{
+  position:absolute;bottom:-12vmin;left:-10vmin;width:44vmin;height:44vmin;opacity:.15;
+}
+.wheel-small .rot{animation:wspin 30s linear infinite reverse;transform-origin:50% 50%}
+@keyframes wspin{to{transform:rotate(360deg)}}
+.hero-overlay{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(120% 90% at 30% 50%,rgba(10,10,10,.96) 0%,rgba(10,10,10,.72) 38%,rgba(10,10,10,.35) 100%),
+    linear-gradient(0deg,var(--bg) 2%,transparent 30%);
+}
+.hero-inner{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding:0 24px;width:100%}
+.hero-eyebrow{
+  font-family:var(--f-mono);font-size:.75rem;letter-spacing:.34em;color:var(--accent);
+  text-transform:uppercase;margin-bottom:22px;
+}
+.hero h1{
+  font-family:var(--f-display);font-size:clamp(3.6rem,12vw,8.5rem);line-height:.86;
+  letter-spacing:.02em;
+}
+.hero .sub{
+  font-family:var(--f-head);font-weight:700;font-size:clamp(1.3rem,3.5vw,2rem);
+  color:var(--chrome);letter-spacing:.04em;margin-top:10px;
+}
+.hero .desc{max-width:46ch;color:#b8b8b8;margin-top:20px;font-size:1.06rem}
+.hero-cta{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-top:34px}
+.btn{
+  font-family:var(--f-head);font-weight:700;font-size:.98rem;letter-spacing:.05em;
+  text-transform:uppercase;padding:15px 28px;border-radius:9px;border:1px solid transparent;
+  transition:transform .2s var(--ease),box-shadow .25s,background .2s;display:inline-flex;gap:8px;align-items:center;
+}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 0 0 rgba(123,79,255,0)}
+.btn-primary:hover{box-shadow:0 10px 40px var(--accent-glow);transform:translateY(-2px)}
+.btn-ghost{border-color:var(--border-2);color:var(--text);background:transparent}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.scroll-hint{
+  position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;
+  font-family:var(--f-mono);font-size:.66rem;letter-spacing:.3em;color:var(--muted);
+  text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.scroll-hint .line{width:1px;height:38px;background:linear-gradient(var(--accent),transparent);animation:drop 1.8s ease-in-out infinite}
+@keyframes drop{0%,100%{opacity:.3;transform:scaleY(.5)}50%{opacity:1;transform:scaleY(1)}}
 
-  /* BUTTONS */
-  .btn { display:inline-flex; align-items:center; gap:10px; font-family:'Space Mono',monospace; font-weight:700; text-transform:uppercase; letter-spacing:.12em; font-size:13px; cursor:pointer; padding:15px 28px; border:1px solid var(--ink); background: var(--ink); color: var(--paper); transition: background .2s,color .2s,border-color .2s; position:relative; overflow:hidden; }
-  .btn .arr { transition: transform .25s ease; display:inline-block; }
-  .btn:hover .arr { transform: translateX(5px); }
-  .btn:hover, .btn:focus-visible { background: var(--accent); border-color: var(--accent); color:#fff; outline:none; }
-  .btn--ghost { background:transparent; color: var(--ink); }
-  .btn--ghost:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .btn:disabled { opacity:.4; cursor:not-allowed; }
-  .btn:disabled:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+/* glitch on headline */
+.glitch{position:relative}
+.glitch.go::before,.glitch.go::after{
+  content:attr(data-text);position:absolute;inset:0;
+}
+.glitch.go::before{color:var(--accent);animation:gl1 .5s steps(2) 1;clip-path:inset(0 0 55% 0)}
+.glitch.go::after{color:var(--chrome);animation:gl2 .5s steps(2) 1;clip-path:inset(55% 0 0 0)}
+@keyframes gl1{0%{transform:translate(0)}20%{transform:translate(-5px,-3px)}40%{transform:translate(4px,2px)}60%{transform:translate(-3px,1px)}100%{transform:translate(0)}}
+@keyframes gl2{0%{transform:translate(0)}20%{transform:translate(5px,3px)}40%{transform:translate(-4px,-2px)}60%{transform:translate(3px,-1px)}100%{transform:translate(0)}}
 
-  /* HERO */
-  .hero { padding:56px 0 40px; }
-  .hero__top { display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; border-bottom:1px solid var(--line); padding-bottom:14px; margin-bottom:36px; }
-  .hero__title { font-family:'Archivo',sans-serif; font-weight:900; text-transform:uppercase; font-size: clamp(38px,11.5vw,180px); line-height:.84; letter-spacing:-0.02em; max-width:100%; overflow:hidden; }
-  .hero__title .thin { font-weight:600; -webkit-text-stroke:1.5px var(--ink); color:transparent; }
-  .hero__title .word { display:inline-block; overflow:hidden; }
-  .hero__title .word > span { display:inline-block; animation: rise .8s cubic-bezier(.2,.8,.2,1) both; animation-delay:1s; }
-  .hero__title .word.w2 > span { animation-delay:1.12s; }
-  .hero__grid { display:grid; grid-template-columns:1.4fr 1fr; gap:32px; align-items:end; margin-top:30px; }
-  .hero__lead { font-size: clamp(16px,2vw,21px); max-width:32ch; color: var(--steel); }
-  .hero__cta-row { display:flex; gap:14px; margin-top:28px; flex-wrap:wrap; }
-  .hero__panel { position:relative; aspect-ratio:4/5; overflow:hidden; background: var(--steel); color: var(--paper); }
-  .hero__panel img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1; transition: transform 1.2s ease; }
-  .hero__panel:hover img { transform: scale(1.06); }
-  .hero__panel img.img-missing { display:none; }
-  .hero__panel .ph-fill { position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; justify-content:space-between; padding:20px; background: linear-gradient(180deg, rgba(0,0,0,.4), transparent 35%, rgba(0,0,0,.5)); }
-  .ph-tag { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; color:#e7e5df; }
-  .ph-big { font-family:'Archivo',sans-serif; font-weight:800; text-transform:uppercase; font-size: clamp(20px,3vw,34px); line-height:.95; color:#fff; }
-  .ph-mark { color: var(--accent); }
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.blueprint{
+  position:absolute;inset:0;z-index:0;opacity:.4;pointer-events:none;
+  background-image:
+    linear-gradient(var(--border) 1px,transparent 1px),
+    linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(120% 80% at 50% 40%,#000 30%,transparent 75%);
+  -webkit-mask-image:radial-gradient(120% 80% at 50% 40%,#000 30%,transparent 75%);
+}
+.about-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center}
+.about-text p{color:#c4c4c4;font-size:1.1rem;margin-top:18px;max-width:52ch}
+.about-text p b{color:var(--text);font-weight:600}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.stat{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:26px 22px;
+  position:relative;overflow:hidden;
+}
+.stat::before{content:"";position:absolute;top:0;left:0;width:34px;height:3px;background:var(--accent)}
+.stat .num{font-family:var(--f-display);font-size:3rem;line-height:1;color:var(--text)}
+.stat .num .plus{color:var(--accent)}
+.stat .cap{color:var(--muted);font-size:.84rem;margin-top:8px;letter-spacing:.02em}
+@media(max-width:820px){.about-grid{grid-template-columns:1fr;gap:40px}}
 
-  /* MARQUEE */
-  .marquee { background: var(--accent); color:#fff; overflow:hidden; white-space:nowrap; border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); margin:8px 0; }
-  .marquee__track { display:inline-flex; animation: tick 26s linear infinite; }
-  .marquee__track span { font-family:'Archivo',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:.06em; font-size: clamp(18px,2.6vw,30px); padding:14px 0; margin-right:44px; }
+/* ============================================================
+   SERVICES
+   ============================================================ */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:48px}
+.svc{
+  position:relative;background:var(--surface);border:1px solid var(--border);
+  padding:32px 26px 30px;border-radius:4px;overflow:hidden;
+  clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,0 100%);
+  transition:transform .25s var(--ease),border-color .25s,box-shadow .25s;
+}
+/* carbon fiber texture */
+.svc::before{
+  content:"";position:absolute;inset:0;z-index:0;opacity:.5;
+  background:
+    repeating-linear-gradient(45deg,rgba(255,255,255,.018) 0 2px,transparent 2px 4px),
+    repeating-linear-gradient(-45deg,rgba(255,255,255,.018) 0 2px,transparent 2px 4px);
+}
+.svc>*{position:relative;z-index:1}
+.svc:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 14px 50px var(--accent-dim)}
+.svc .ico{width:46px;height:46px;color:var(--accent);margin-bottom:18px}
+.svc h3{font-family:var(--f-head);font-weight:700;font-size:1.3rem;letter-spacing:.02em}
+.svc p{color:var(--muted);font-size:.95rem;margin-top:10px}
+.svc .idx{position:absolute;top:14px;right:18px;font-family:var(--f-mono);font-size:.72rem;color:var(--border-2)}
+.svc-order{
+  margin-top:20px;background:transparent;border:1px solid var(--border-2);color:var(--text);
+  font-family:var(--f-head);font-weight:700;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;
+  padding:11px 18px;border-radius:8px;transition:background .2s,border-color .2s,color .2s;
+  display:inline-flex;align-items:center;gap:7px;
+}
+.svc-order:hover{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 6px 22px var(--accent-dim)}
+@media(max-width:880px){.svc-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.svc-grid{grid-template-columns:1fr}}
 
-  /* SECTION */
-  section.block { padding:84px 0; }
-  .sec-head { display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; border-bottom:1px solid var(--line); padding-bottom:16px; margin-bottom:44px; }
-  .sec-head h2 { font-family:'Archivo',sans-serif; font-weight:900; text-transform:uppercase; font-size: clamp(34px,6vw,78px); line-height:.9; letter-spacing:-0.01em; }
-  .sec-head .idx { font-family:'Space Mono',monospace; color: var(--accent); font-size:13px; letter-spacing:.1em; }
+/* ---------- Order modal ---------- */
+#orderModal{
+  position:fixed;inset:0;z-index:9750;background:rgba(0,0,0,.82);
+  display:none;align-items:center;justify-content:center;padding:24px;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+#orderModal.open{display:flex;animation:fadeUp .3s var(--ease)}
+.modal-card{
+  position:relative;width:min(540px,100%);max-height:90vh;overflow-y:auto;
+  background:var(--surface);border:1px solid var(--border-2);border-radius:16px;padding:34px 30px;
+  box-shadow:0 30px 90px rgba(0,0,0,.6);
+}
+.modal-card .mclose{position:absolute;top:16px;right:16px;background:none;border:0;color:var(--muted);font-size:1.7rem;line-height:1;width:36px;height:36px;transition:color .2s}
+.modal-card .mclose:hover{color:var(--text)}
+.modal-card .mlabel{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.3em;color:var(--accent);text-transform:uppercase}
+.modal-card h3{font-family:var(--f-display);font-size:2rem;letter-spacing:.02em;margin:8px 0 22px}
+.modal-card h3 span{color:var(--accent)}
 
-  /* MANIFESTO */
-  .manifesto p { font-family:'Archivo',sans-serif; font-weight:600; text-transform:uppercase; font-size: clamp(22px,3.6vw,46px); line-height:1.12; }
-  .manifesto p .accent { color: var(--accent); }
-  .manifesto p .out { -webkit-text-stroke:1px var(--ink); color:transparent; }
-  .manifesto .sub { font-family:'Inter',sans-serif; font-weight:400; text-transform:none; font-size:16px; color: var(--steel); max-width:62ch; margin-top:28px; line-height:1.6; }
+/* ============================================================
+   BRANDS TICKER
+   ============================================================ */
+#brands{text-align:center}
+.ticker-wrap{margin-top:42px;position:relative;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+}
+.ticker{display:flex;gap:14px;width:max-content;padding:10px 0}
+.ticker.row1{animation:slideL 38s linear infinite}
+.ticker.row2{animation:slideR 44s linear infinite;margin-top:14px}
+@keyframes slideL{to{transform:translateX(-50%)}}
+@keyframes slideR{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.ticker-wrap:hover .ticker{animation-play-state:paused}
+.pill{
+  flex:none;border:1px solid var(--border-2);padding:9px 22px;border-radius:30px;
+  font-family:var(--f-head);font-weight:600;letter-spacing:.05em;color:var(--chrome);
+  font-size:.95rem;white-space:nowrap;transition:.2s;background:var(--surface);
+}
+.pill:hover{border-color:var(--accent);color:var(--text);box-shadow:0 0 18px var(--accent-dim)}
+.brands-note{color:var(--muted);margin-top:34px;font-size:.96rem}
+.brands-note b{color:var(--accent);font-weight:600}
 
-  /* CATALOG */
-  .grid { display:grid; grid-template-columns: repeat(3,1fr); gap:1px; background: var(--line); border:1px solid var(--line); }
-  .card { background: var(--paper); display:flex; flex-direction:column; transition: background .25s; }
-  .card:hover { background: var(--card); }
-  .card__media { position:relative; aspect-ratio:4/5; overflow:hidden; border-bottom:1px solid var(--line); background: linear-gradient(135deg,#d6d3ca,#cfccc2); display:flex; align-items:center; justify-content:center; }
-  .card__img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1; transition: transform .7s ease; }
-  .card:hover .card__img { transform: scale(1.05); }
-  .card__img.img-missing { display:none; }
-  .card__ph { position:relative; z-index:0; text-align:center; }
-  .card__ph .pmark { font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.25em; color: var(--accent); }
-  .card__ph .pnote { font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.15em; color: var(--muted); margin-top:6px; }
-  .card__num { position:absolute; top:12px; left:14px; z-index:3; font-family:'Archivo',sans-serif; font-weight:900; font-size:20px; color:#fff; mix-blend-mode: difference; }
-  .card__status { position:absolute; top:14px; right:14px; z-index:3; font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; padding:4px 8px; border:1px solid var(--ink); background: var(--paper); }
-  .card__status.in { color: var(--accent); border-color: var(--accent); }
-  .card__body { padding:20px; display:flex; flex-direction:column; gap:14px; flex:1; }
-  .card__head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
-  .card__name { font-family:'Archivo',sans-serif; font-weight:800; text-transform:uppercase; font-size:19px; line-height:1; }
-  .card__price { font-family:'Space Mono',monospace; font-weight:700; font-size:15px; white-space:nowrap; }
-  .card__desc { font-size:13.5px; color: var(--steel); line-height:1.55; flex:1; }
-  .specs { display:grid; grid-template-columns:auto 1fr; gap:4px 16px; border-top:1px solid var(--line); padding-top:12px; }
-  .specs dt { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color: var(--muted); }
-  .specs dd { font-family:'Space Mono',monospace; font-size:11px; text-align:right; }
-  .card__foot { display:flex; align-items:center; justify-content:space-between; gap:12px; }
-  .sizes { display:flex; gap:5px; flex-wrap:wrap; }
-  .sizes span { font-family:'Space Mono',monospace; border:1px solid var(--line); color: var(--steel); font-size:11px; padding:3px 7px; }
-  .card:hover .sizes span { border-color: var(--muted); }
-  .card .btn { width:100%; justify-content:center; }
+/* ============================================================
+   PORTFOLIO
+   ============================================================ */
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-top:38px}
+.filter{
+  font-family:var(--f-head);font-weight:600;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;
+  background:var(--surface);border:1px solid var(--border);color:var(--muted);
+  padding:9px 20px;border-radius:30px;transition:.2s;
+}
+.filter:hover{color:var(--text);border-color:var(--border-2)}
+.filter.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 16px var(--accent-dim)}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+.shot{
+  position:relative;aspect-ratio:4/3;border-radius:10px;overflow:hidden;cursor:pointer;
+  border:1px solid var(--border);background:var(--surface-2);
+  transition:opacity .4s,transform .4s,border-color .25s;
+}
+.shot.hide{display:none}
+.shot img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.shot:hover{border-color:var(--accent)}
+.shot:hover img{transform:scale(1.07)}
+.shot .ph{
+  width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  background:radial-gradient(120% 120% at 50% 30%,#1a1a1a,#0e0e0e);color:var(--border-2);
+}
+.shot .ph .pm{font-family:var(--f-display);font-size:2.6rem;color:#2a2a2a;letter-spacing:.05em}
+.shot .ph small{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.25em;color:var(--muted)}
+.shot .ov{
+  position:absolute;inset:0;display:flex;align-items:flex-end;padding:18px;
+  background:linear-gradient(0deg,rgba(0,0,0,.85),transparent 60%);
+  opacity:0;transition:opacity .3s;
+}
+.shot:hover .ov{opacity:1}
+.shot .ov span{font-family:var(--f-head);font-weight:700;letter-spacing:.04em;font-size:1.05rem}
+.shot .ov small{display:block;color:var(--accent);font-family:var(--f-mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase}
+@media(max-width:820px){.gallery{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.gallery{grid-template-columns:1fr}}
 
-  /* SIZE CHARTS */
-  .size-tabs { display:flex; margin-bottom:28px; border:1px solid var(--ink); width: fit-content; }
-  .size-tab { font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.12em; text-transform:uppercase; padding:11px 26px; background:transparent; border:none; cursor:pointer; color: var(--ink); transition: background .2s,color .2s; }
-  .size-tab + .size-tab { border-left:1px solid var(--ink); }
-  .size-tab.active { background: var(--ink); color: var(--paper); }
-  .size-panel[hidden] { display:none; }
-  .size-layout { display:grid; grid-template-columns: 1.4fr .8fr; gap:40px; align-items:start; }
-  table.size { width:100%; border-collapse: collapse; font-family:'Space Mono',monospace; }
-  table.size th, table.size td { border:1px solid var(--line); padding:13px 8px; text-align:center; font-size:14px; }
-  table.size thead th { background: var(--steel); color: var(--paper); font-weight:700; }
-  table.size tbody th { background: var(--card); text-align:left; padding-left:14px; font-weight:700; }
-  table.size tbody tr:hover td { background: var(--card); }
-  table.size .accent-col { color: var(--accent); }
-  .size-legend { font-size:14px; line-height:1.8; }
-  .size-legend .lg { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); }
-  .size-legend .lg b { font-family:'Space Mono',monospace; color: var(--accent); min-width:18px; }
-  .size-note { font-family:'Space Mono',monospace; font-size:11px; color: var(--muted); margin-top:18px; letter-spacing:.05em; }
+/* lightbox */
+#lightbox{
+  position:fixed;inset:0;z-index:9700;background:rgba(0,0,0,.94);
+  display:none;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);
+}
+#lightbox.open{display:flex}
+#lightbox img{max-width:90vw;max-height:84vh;border-radius:8px;border:1px solid var(--border-2);box-shadow:0 20px 80px rgba(0,0,0,.6)}
+#lightbox .lb-ph{width:min(90vw,720px);aspect-ratio:4/3;display:grid;place-items:center;background:radial-gradient(120% 120% at 50% 30%,#1a1a1a,#0e0e0e);border-radius:8px;color:#2a2a2a;font-family:var(--f-display);font-size:5rem;border:1px solid var(--border-2)}
+.lb-btn{
+  position:absolute;top:50%;transform:translateY(-50%);background:rgba(20,20,20,.7);
+  border:1px solid var(--border-2);color:var(--text);width:54px;height:54px;border-radius:50%;
+  font-size:1.5rem;display:grid;place-items:center;transition:.2s;
+}
+.lb-btn:hover{background:var(--accent);border-color:var(--accent)}
+.lb-prev{left:24px}.lb-next{right:24px}
+.lb-close{position:absolute;top:24px;right:24px;background:none;border:0;color:var(--text);font-size:2rem;width:44px;height:44px;line-height:1}
+.lb-count{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-family:var(--f-mono);font-size:.78rem;letter-spacing:.2em;color:var(--muted)}
 
-  /* LOOKBOOK */
-  .lookbook-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
-  .look { position:relative; aspect-ratio:3/4; overflow:hidden; background: var(--steel); color: var(--paper); }
-  .look img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1; transition: transform .8s ease; }
-  .look:hover img { transform: scale(1.06); }
-  .look img.img-missing { display:none; }
-  .look .l-fill { position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; justify-content:space-between; padding:18px; background: linear-gradient(180deg, rgba(0,0,0,.3), transparent 40%, rgba(0,0,0,.45)); }
-  .look:hover .l-fill { background: linear-gradient(180deg, rgba(0,0,0,.15), transparent 50%, rgba(27,60,255,.4)); }
-  .look .l-idx { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; color:#e7e5df; }
-  .look .l-cap { font-family:'Archivo',sans-serif; font-weight:800; text-transform:uppercase; font-size: clamp(18px,2.4vw,26px); line-height:.95; color:#fff; }
+/* ============================================================
+   ORDER BUILDER
+   ============================================================ */
+#order{background:var(--surface)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:42px;background:var(--bg);padding:7px;border-radius:14px;border:1px solid var(--border);width:max-content;max-width:100%}
+.tab{
+  font-family:var(--f-head);font-weight:600;font-size:.92rem;letter-spacing:.04em;
+  color:var(--muted);background:transparent;border:0;padding:12px 24px;border-radius:9px;transition:.2s;
+}
+.tab.active{background:var(--accent);color:#fff;box-shadow:0 6px 22px var(--accent-dim)}
+.tab:not(.active):hover{color:var(--text)}
+.panel{display:none;margin-top:34px;animation:fadeUp .4s var(--ease)}
+.panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.helper{color:var(--muted);font-size:.95rem;max-width:62ch;margin-bottom:26px;border-left:2px solid var(--accent);padding-left:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 20px}
+.full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:7px}
+.field label{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.field input,.field select,.field textarea{
+  background:var(--surface);border:1px solid var(--border-2);color:var(--text);
+  font-family:var(--f-body);font-size:.98rem;padding:13px 15px;border-radius:9px;
+  transition:border-color .2s,box-shadow .2s;width:100%;
+}
+.field textarea{resize:vertical;min-height:110px}
+.field input::placeholder,.field textarea::placeholder{color:#555}
+.field select{appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' stroke='%237B4FFF' stroke-width='2'%3E%3Cpath d='M3 5l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:38px;
+}
+.field select option{background:var(--surface);color:var(--text)}
+.field input:focus,.field select:focus,.field textarea:focus{
+  outline:0;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)
+}
+.form-foot{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:26px}
+.form-foot .direct{color:var(--muted);font-size:.9rem}
+.form-foot .direct a{color:var(--accent);font-weight:600}
+.success{
+  display:none;align-items:center;gap:14px;margin-top:26px;padding:18px 22px;border-radius:12px;
+  background:rgba(123,79,255,.08);border:1px solid var(--accent-dim);color:var(--text);
+  font-size:1rem;animation:fadeUp .5s var(--ease);
+}
+.success.show{display:flex}
+.success .ok{width:30px;height:30px;flex:none;border-radius:50%;background:var(--accent);display:grid;place-items:center;color:#fff;font-weight:700}
+@media(max-width:680px){.form-grid{grid-template-columns:1fr}.tabs{width:100%}.tab{flex:1;text-align:center;padding:12px 10px;font-size:.82rem}}
 
-  /* ABOUT */
-  .about-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:60px; align-items:start; }
-  .about-text p { font-size:17px; line-height:1.7; color: var(--steel); margin-bottom:18px; }
-  .about-text p b { color: var(--ink); }
-  .about-text .pull { font-family:'Archivo',sans-serif; font-weight:700; text-transform:uppercase; font-size: clamp(20px,2.6vw,30px); line-height:1.1; color: var(--ink); margin:8px 0 24px; }
-  .about-mascot { margin-top:26px; border:1px solid var(--line); background:#fff; padding:18px 20px; display:flex; align-items:center; gap:18px; }
-  .about-mascot img { width:84px; height:84px; object-fit:contain; flex-shrink:0; }
-  .about-mascot .mtxt { font-family:'Space Mono',monospace; font-size:12px; color: var(--muted); letter-spacing:.04em; line-height:1.55; }
-  .about-mascot .mtxt b { color: var(--ink); }
-  .facts { display:flex; flex-direction:column; }
-  .fact { border-top:1px solid var(--line); padding:20px 0; display:flex; gap:16px; align-items:flex-start; transition: padding-left .25s ease; }
-  .fact:hover { padding-left:10px; }
-  .fact:last-child { border-bottom:1px solid var(--line); }
-  .fact .f-no { font-family:'Space Mono',monospace; color: var(--accent); font-size:12px; padding-top:3px; }
-  .fact .f-title { font-family:'Archivo',sans-serif; font-weight:800; text-transform:uppercase; font-size:17px; }
-  .fact .f-text { font-size:14px; color: var(--muted); margin-top:4px; }
+/* ============================================================
+   PROCESS TIMELINE
+   ============================================================ */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:54px;position:relative}
+.step{position:relative;padding:0 22px}
+.step:not(:last-child)::after{
+  content:"";position:absolute;top:30px;right:-2px;width:100%;height:0;
+  border-top:2px dashed var(--border-2);
+}
+.step .arrow{position:absolute;top:24px;right:-7px;color:var(--accent);font-size:1rem;z-index:2}
+.step .n{font-family:var(--f-display);font-size:3.4rem;line-height:1;color:var(--accent);position:relative;z-index:1}
+.step h4{font-family:var(--f-head);font-weight:700;font-size:1.18rem;margin-top:10px;letter-spacing:.02em}
+.step p{color:var(--muted);font-size:.92rem;margin-top:8px;max-width:24ch}
+@media(max-width:780px){
+  .timeline{grid-template-columns:1fr;gap:34px}
+  .step{padding:0 0 0 24px;border-left:2px dashed var(--border-2)}
+  .step::after,.step .arrow{display:none}
+  .step .n{font-size:2.6rem}
+}
 
-  /* FAQ */
-  .faq { border-top:1px solid var(--line); }
-  .faq details { border-bottom:1px solid var(--line); }
-  .faq summary { list-style:none; cursor:pointer; padding:22px 0; display:flex; justify-content:space-between; align-items:center; gap:16px; font-family:'Archivo',sans-serif; font-weight:700; text-transform:uppercase; font-size: clamp(16px,2.2vw,22px); transition: color .2s; }
-  .faq summary:hover { color: var(--accent); }
-  .faq summary::-webkit-details-marker { display:none; }
-  .faq summary .plus { font-family:'Space Mono',monospace; color: var(--accent); transition: transform .25s; }
-  .faq details[open] summary .plus { transform: rotate(45deg); }
-  .faq .answer { padding:0 0 22px; color: var(--steel); font-size:15px; line-height:1.65; max-width:70ch; }
+/* ============================================================
+   CONTACTS
+   ============================================================ */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:46px;margin-top:46px}
+.cinfo .row{display:flex;gap:16px;align-items:flex-start;padding:18px 0;border-bottom:1px solid var(--border)}
+.cinfo .row:first-child{padding-top:0}
+.cinfo .ic{width:40px;height:40px;flex:none;border:1px solid var(--border-2);border-radius:10px;display:grid;place-items:center;color:var(--accent)}
+.cinfo .k{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.cinfo .v{font-size:1.05rem;margin-top:3px}
+.cinfo .v a{color:var(--text);transition:color .2s}
+.cinfo .v a:hover{color:var(--accent)}
+.cbox{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:30px}
+@media(max-width:780px){.contact-grid{grid-template-columns:1fr;gap:34px}}
 
-  /* FOOTER */
-  footer { background: var(--steel); color: var(--paper); padding:70px 0 28px; margin-top:40px; }
-  .foot-top { display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px; padding-bottom:50px; border-bottom:1px solid #3a3a36; }
-  .foot-logo { font-family:'Archivo',sans-serif; font-weight:900; font-size: clamp(60px,12vw,140px); line-height:.85; }
-  .foot-logo .tail { color: var(--accent); }
-  .foot-col h4 { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#9a968c; margin-bottom:16px; }
-  .foot-col a, .foot-col p { display:block; font-size:14px; color: var(--paper); margin-bottom:10px; transition: color .2s, transform .2s; }
-  .foot-col a:hover { color: var(--accent); transform: translateX(4px); }
-  .foot-bottom { display:flex; justify-content:space-between; flex-wrap:wrap; gap:14px; padding-top:24px; }
-  .foot-bottom p { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em; color:#9a968c; }
-  .foot-note { color:#c9c5bb !important; }
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{border-top:1px solid var(--border);padding:54px 0 30px;text-align:center}
+.f-mono-line{display:flex;align-items:center;gap:16px;max-width:var(--maxw);margin:0 auto 36px;padding:0 24px}
+.f-mono-line::before,.f-mono-line::after{content:"";flex:1;height:1px;background:var(--border)}
+.f-mono-line .pm{width:40px;height:40px;border:1.5px solid var(--accent);border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);color:var(--accent);font-size:.95rem}
+.f-brand{font-family:var(--f-display);font-size:2.4rem;letter-spacing:.04em}
+.f-brand span{color:var(--accent)}
+.f-tag{color:var(--chrome);font-family:var(--f-head);font-weight:600;letter-spacing:.04em;margin-top:4px}
+.f-links{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin:24px 0}
+.f-links a{color:var(--muted);font-family:var(--f-head);font-weight:600;font-size:.88rem;letter-spacing:.05em;text-transform:uppercase;transition:color .2s}
+.f-links a:hover{color:var(--accent)}
+.f-copy{color:var(--muted);font-size:.82rem;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.f-copy .sep{color:var(--border-2)}
 
-  /* REVEAL */
-  .reveal { opacity:0; transform: translateY(28px); transition: opacity .6s ease-out, transform .6s ease-out; }
-  .reveal.visible { opacity:1; transform:none; }
-  .stagger > * { opacity:0; transform: translateY(28px); transition: opacity .6s ease-out, transform .6s ease-out; }
-  .stagger.visible > * { opacity:1; transform:none; }
-  .stagger.visible > *:nth-child(1){ transition-delay:0s; }
-  .stagger.visible > *:nth-child(2){ transition-delay:.07s; }
-  .stagger.visible > *:nth-child(3){ transition-delay:.14s; }
-  .stagger.visible > *:nth-child(4){ transition-delay:.21s; }
-  .stagger.visible > *:nth-child(5){ transition-delay:.28s; }
-  .stagger.visible > *:nth-child(6){ transition-delay:.35s; }
+/* ---------- Back to top ---------- */
+#totop{
+  position:fixed;right:22px;bottom:22px;z-index:7000;width:50px;height:50px;border-radius:12px;
+  background:var(--accent);color:#fff;border:0;display:grid;place-items:center;
+  box-shadow:0 8px 30px var(--accent-dim);opacity:0;visibility:hidden;transform:translateY(14px);
+  transition:.3s var(--ease);
+}
+#totop.show{opacity:1;visibility:visible;transform:none}
+#totop:hover{box-shadow:0 12px 40px var(--accent-glow)}
 
-  /* MODAL */
-  .overlay { position:fixed; inset:0; background: rgba(18,18,17,.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display:none; align-items:center; justify-content:center; padding:24px; z-index:1500; opacity:0; transition: opacity .25s ease; }
-  .overlay.open { display:flex; opacity:1; }
-  .modal { background: var(--paper); border:1px solid var(--ink); width:100%; max-width:460px; padding:32px; position:relative; max-height:92vh; overflow-y:auto; transform: translateY(16px) scale(.98); transition: transform .3s cubic-bezier(.2,.8,.2,1); }
-  .overlay.open .modal { transform:none; }
-  .modal .m-idx { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; color: var(--accent); text-transform:uppercase; }
-  .modal h3 { font-family:'Archivo',sans-serif; font-weight:900; text-transform:uppercase; font-size:26px; margin:6px 0 2px; }
-  .modal .m-price { font-family:'Space Mono',monospace; font-weight:700; font-size:15px; margin-bottom:22px; }
-  .modal-close { position:absolute; top:16px; right:18px; background:none; border:none; color: var(--ink); font-size:26px; line-height:1; cursor:pointer; transition: color .2s, transform .2s; }
-  .modal-close:hover { color: var(--accent); transform: rotate(90deg); }
-  .field { display:flex; flex-direction:column; gap:7px; margin-bottom:16px; }
-  .field label { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.15em; text-transform:uppercase; color: var(--muted); }
-  .field input, .field select, .field textarea { background:#fff; border:1px solid var(--line); color: var(--ink); font-family:'Inter',sans-serif; font-size:14px; padding:12px 14px; width:100%; }
-  .field textarea { resize:vertical; min-height:68px; }
-  .field input:focus, .field select:focus, .field textarea:focus { outline:none; border-color: var(--accent); }
-  .field select { appearance:none; -webkit-appearance:none; cursor:pointer; }
-  .modal .btn { width:100%; justify-content:center; margin-top:6px; }
-  .modal .m-hint { font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.08em; color: var(--muted); margin-top:14px; text-align:center; }
-
-  /* BACK TO TOP */
-  .to-top { position:fixed; right:22px; bottom:22px; z-index:880; width:46px; height:46px; border:1px solid var(--ink); background: var(--paper); color: var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0; transform: translateY(12px); pointer-events:none; transition: opacity .3s, transform .3s, background .2s, color .2s; font-size:18px; }
-  .to-top.show { opacity:1; transform:none; pointer-events:auto; }
-  .to-top:hover { background: var(--accent); color:#fff; border-color: var(--accent); }
-
-  /* LIGHTBOX */
-  .card__media, .look, .hero__panel, .about-mascot img { cursor: zoom-in; }
-  .lightbox { position:fixed; inset:0; z-index:2500; background: rgba(10,10,10,.93); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display:none; align-items:center; justify-content:center; padding:24px; opacity:0; transition: opacity .25s ease; cursor: zoom-out; }
-  .lightbox.open { display:flex; opacity:1; }
-  .lightbox img { max-width:95vw; max-height:92vh; width:auto; height:auto; object-fit:contain; box-shadow:0 0 0 1px rgba(255,255,255,.12); transform: scale(.96); transition: transform .25s cubic-bezier(.2,.8,.2,1); cursor: default; }
-  .lightbox.open img { transform: scale(1); }
-  .lb-close { position:absolute; top:16px; right:22px; background:none; border:none; color:#fff; font-size:36px; line-height:1; cursor:pointer; opacity:.8; transition: opacity .2s, transform .2s; }
-  .lb-close:hover { opacity:1; transform: rotate(90deg); }
-  .lb-hint { position:absolute; bottom:18px; left:0; right:0; text-align:center; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#9a968c; }
-
-  /* RESPONSIVE */
-  @media (max-width: 1000px) { .grid { grid-template-columns: repeat(2,1fr); } }
-  @media (max-width: 900px) {
-    .hero__grid { grid-template-columns:1fr; gap:24px; }
-    .about-grid { grid-template-columns:1fr; gap:40px; }
-    .foot-top { grid-template-columns:1fr; gap:32px; }
-    .lookbook-grid { grid-template-columns: repeat(2,1fr); }
-    .size-layout { grid-template-columns:1fr; gap:28px; }
-  }
-  @media (max-width: 768px) {
-    .nav__links, .nav__cta { display:none; }
-    .nav__burger { display:flex; }
-    .nav.open .nav__links { display:flex; position:absolute; top:64px; left:0; right:0; flex-direction:column; gap:0; background: var(--paper); border-bottom:1px solid var(--line); }
-    .nav.open .nav__links a { padding:16px 28px; border-top:1px solid var(--line); }
-    section.block { padding:60px 0; }
-  }
-  @media (max-width: 620px) { .grid { grid-template-columns:1fr; } }
-  @media (max-width: 600px) {
-    .size-panel { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table.size { min-width: 460px; }
-    table.size th, table.size td { padding: 9px 5px; font-size: 12px; }
-    table.size tbody th { font-size: 11px; padding-left: 8px; }
-    .hero__cta-row .btn { width: 100%; }
-    .about-mascot { flex-direction: column; align-items: flex-start; }
-    .sec-head { gap: 8px; }
-  }
-  @media (max-width: 520px) { .lookbook-grid { grid-template-columns:1fr; } .wrap { padding:0 18px; } }
-  @media (max-width: 400px) { .hero__title { font-size: 44px; } .nav__logo, .foot-logo { letter-spacing: 0; } }
-
-  /* REDUCED MOTION */
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
-    .reveal, .stagger > * { opacity:1 !important; transform:none !important; }
-    #loader { display:none !important; }
-    .hero__title .word > span { transform:none !important; }
-  }
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.05s!important}
+  html{scroll-behavior:auto}
+}
 </style>
 </head>
 <body>
 
-  <div class="scroll-progress" id="progress"></div>
+<!-- ============ Scroll progress ============ -->
+<div id="progress"></div>
 
-  <!-- LOADER -->
-  <div id="loader">
-    <div class="l-logo"><span>S</span><span>P</span><span>W</span></div>
-    <div class="l-bar"><i id="lbar"></i></div>
-    <div class="l-meta"><span>Skatepark Wear</span><span class="l-count" id="lcount">000</span></div>
+<!-- ============ Loader ============ -->
+<div id="loader">
+  <svg class="spin" viewBox="0 0 100 100" aria-hidden="true">
+    <circle cx="50" cy="50" r="44" fill="none" stroke="#1c1c1c" stroke-width="4"/>
+    <circle cx="50" cy="50" r="44" fill="none" stroke="#7B4FFF" stroke-width="4" stroke-linecap="round" stroke-dasharray="70 200"/>
+    <circle cx="50" cy="50" r="10" fill="none" stroke="#7B4FFF" stroke-width="3"/>
+    <g stroke="#C0C0C0" stroke-width="2">
+      <line x1="50" y1="22" x2="50" y2="40"/>
+      <line x1="74" y1="36" x2="60" y2="46"/>
+      <line x1="68" y1="68" x2="56" y2="58"/>
+      <line x1="32" y1="68" x2="44" y2="58"/>
+      <line x1="26" y1="36" x2="40" y2="46"/>
+    </g>
+  </svg>
+  <div class="lbl">PHANTOM&nbsp;WHEELS</div>
+</div>
+
+<!-- ============ NAV ============ -->
+<header>
+  <div class="nav">
+    <a class="brand" href="#hero" aria-label="Phantom Wheels — на главную">
+      <span class="mark">PW</span>
+      <span class="name">PHANTOM<span>.</span></span>
+    </a>
+    <nav class="links" id="navlinks">
+      <a href="#about">О нас</a>
+      <a href="#services">Услуги</a>
+      <a href="#brands">Бренды</a>
+      <a href="#portfolio">Портфолио</a>
+      <a href="#order">Конструктор заказа</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <a class="nav-tg" href="https://t.me/PhantomWheelsBy" target="_blank" rel="noopener">@PhantomWheelsBy</a>
+    <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section id="hero">
+  <div class="hero-bg">
+    <!-- Main wheel (5-spoke alloy, BBS/Vossen style) -->
+    <svg class="wheel-main" id="wheelMain" viewBox="0 0 400 400" aria-hidden="true">
+      <defs>
+        <filter id="blurMain"><feGaussianBlur stdDeviation="0.6"/></filter>
+        <radialGradient id="rim" cx="50%" cy="50%" r="50%">
+          <stop offset="78%" stop-color="rgba(123,79,255,0)"/>
+          <stop offset="100%" stop-color="rgba(123,79,255,.10)"/>
+        </radialGradient>
+      </defs>
+      <g class="rot" filter="url(#blurMain)">
+        <circle cx="200" cy="200" r="190" fill="url(#rim)"/>
+        <circle cx="200" cy="200" r="188" fill="none" stroke="rgba(123,79,255,.30)" stroke-width="3"/>
+        <circle cx="200" cy="200" r="176" fill="none" stroke="rgba(192,192,192,.18)" stroke-width="1.5"/>
+        <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(192,192,192,.22)" stroke-width="2"/>
+        <!-- 5 angular split spokes -->
+        <g stroke="#C0C0C0" stroke-opacity=".55" stroke-width="2.5" fill="none" stroke-linejoin="round">
+          <g id="spoke">
+            <path d="M200 56 L182 150 L200 168 L218 150 Z"/>
+            <path d="M191 100 L191 150"/>
+            <path d="M209 100 L209 150"/>
+          </g>
+          <use href="#spoke" transform="rotate(72 200 200)"/>
+          <use href="#spoke" transform="rotate(144 200 200)"/>
+          <use href="#spoke" transform="rotate(216 200 200)"/>
+          <use href="#spoke" transform="rotate(288 200 200)"/>
+        </g>
+        <!-- lug nuts -->
+        <g fill="rgba(123,79,255,.5)">
+          <circle cx="200" cy="178" r="4"/>
+          <circle cx="221" cy="193" r="4" transform="rotate(72 200 200)"/>
+          <circle cx="221" cy="193" r="4" transform="rotate(144 200 200)"/>
+          <circle cx="221" cy="193" r="4" transform="rotate(216 200 200)"/>
+          <circle cx="221" cy="193" r="4" transform="rotate(288 200 200)"/>
+        </g>
+        <circle cx="200" cy="200" r="34" fill="#0e0e0e" stroke="rgba(123,79,255,.6)" stroke-width="2.5"/>
+        <circle cx="200" cy="200" r="20" fill="none" stroke="rgba(192,192,192,.3)" stroke-width="1.5"/>
+        <text x="200" y="207" text-anchor="middle" font-family="Bebas Neue,sans-serif" font-size="20" fill="rgba(123,79,255,.8)">PW</text>
+      </g>
+    </svg>
+
+    <!-- Secondary wheel -->
+    <svg class="wheel-small" viewBox="0 0 400 400" aria-hidden="true">
+      <g class="rot" filter="url(#blurMain)">
+        <circle cx="200" cy="200" r="188" fill="none" stroke="rgba(192,192,192,.5)" stroke-width="3"/>
+        <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(192,192,192,.4)" stroke-width="2"/>
+        <g stroke="#C0C0C0" stroke-width="3" fill="none">
+          <use href="#spoke"/>
+          <use href="#spoke" transform="rotate(72 200 200)"/>
+          <use href="#spoke" transform="rotate(144 200 200)"/>
+          <use href="#spoke" transform="rotate(216 200 200)"/>
+          <use href="#spoke" transform="rotate(288 200 200)"/>
+        </g>
+        <circle cx="200" cy="200" r="34" fill="#0e0e0e" stroke="rgba(192,192,192,.6)" stroke-width="3"/>
+      </g>
+    </svg>
+  </div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-inner hero">
+    <div class="hero-eyebrow">// ТЮНИНГ ПОД ЗАКАЗ ИЗ КИТАЯ • БЕЛАРУСЬ //</div>
+    <h1 class="glitch" id="heroTitle" data-text="PHANTOM WHEELS">PHANTOM WHEELS</h1>
+    <div class="sub">Делаем тачки злее.</div>
+    <p class="desc">Диски, обвесы и тюнинг под заказ из Китая. Любой стиль. Любой проект. Под твой автомобиль.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#order">Собрать свой проект →</a>
+      <a class="btn btn-ghost" href="#portfolio">Смотреть работы</a>
+    </div>
   </div>
 
-  <!-- TICKER -->
-  <div class="ticker" aria-hidden="true">
-    <div class="ticker__track">
-      <span>SPW — SKATEPARK WEAR <b>/</b> MINSK 53.9°N 27.5°E <b>/</b> SS26 DROP <b>/</b> ДОСТАВКА РБ — СНГ <b>/</b> BAGGY ONLY <b>/</b></span>
-      <span>SPW — SKATEPARK WEAR <b>/</b> MINSK 53.9°N 27.5°E <b>/</b> SS26 DROP <b>/</b> ДОСТАВКА РБ — СНГ <b>/</b> BAGGY ONLY <b>/</b></span>
+  <div class="scroll-hint"><div class="line"></div>SCROLL</div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" class="sec">
+  <div class="blueprint"></div>
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <span class="label">// О НАС //</span>
+        <h2 class="h2">Это не магазин.<br>Это <span>сервис.</span></h2>
+        <p>Phantom Wheels — это не магазин. Это сервис персонального подбора автокомпонентов из Китая.</p>
+        <p>Мы находим то, чего нет на рынке СНГ: <b>редкие диски</b>, <b>агрессивные обвесы</b>, уникальный тюнинг. Под твой автомобиль. Под твой стиль. Под твой бюджет.</p>
+      </div>
+      <div class="stats reveal">
+        <div class="stat"><div class="num" data-count="313">0<span class="plus">+</span></div><div class="cap">Подписчиков в Telegram</div></div>
+        <div class="stat"><div class="num" data-count="100">0<span class="plus">+</span></div><div class="cap">Выполненных заказов</div></div>
+        <div class="stat"><div class="num" data-count="50">0<span class="plus">+</span></div><div class="cap">Брендов в каталоге</div></div>
+        <div class="stat"><div class="num" data-count="14">0</div><div class="cap">Дней средняя доставка</div></div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- NAV -->
-  <header class="nav" id="nav">
-    <div class="wrap nav__inner">
-      <a href="#top" class="nav__logo">SPW</a>
-      <nav class="nav__links">
-        <a href="#catalog">Каталог</a>
-        <a href="#sizes">Размеры</a>
-        <a href="#lookbook">Lookbook</a>
-        <a href="#about">О бренде</a>
-        <a href="#faq">Доставка</a>
-      </nav>
-      <a href="#catalog" class="nav__cta">Заказать</a>
-      <div class="nav__burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></div>
+<div class="divider"><i></i></div>
+
+<!-- ============ SERVICES ============ -->
+<section id="services" class="sec">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="label">// УСЛУГИ //</span>
+      <h2 class="h2">Что мы <span>делаем</span></h2>
     </div>
-  </header>
-
-  <!-- HERO -->
-  <a id="top"></a>
-  <section class="hero">
-    <div class="wrap">
-      <div class="hero__top">
-        <span class="mono-label">[ 01 ] — BAGGY STREETWEAR FROM MINSK</span>
-        <span class="mono-label">СКЕЙТ · ДВОР · РЭП</span>
+    <div class="svc-grid">
+      <div class="svc reveal"><span class="idx">01</span>
+        <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><circle cx="24" cy="24" r="20"/><circle cx="24" cy="24" r="6"/><path d="M24 4v12M44 24H32M24 44V32M4 24h12"/></svg>
+        <h3>Диски под заказ</h3>
+        <p>Литые, кованые, реплики. Любые размеры от R16 до R22+. Подбор под параметры авто.</p>
+        <button class="svc-order" data-svc="Диски под заказ">Заказать →</button>
       </div>
-
-      <h1 class="hero__title"><span class="word"><span>SKATEPARK</span></span><br><span class="word w2 thin"><span>WEAR</span></span></h1>
-
-      <div class="hero__grid">
-        <div>
-          <p class="hero__lead">Бэгги-джинсы, шорты и штаны для тех, кто живёт между рампой, двором и последним вагоном метро. Камо, плотный котон, фирменная вышивка-маскот. Сделано в Минске.</p>
-          <div class="hero__cta-row">
-            <a href="#catalog" class="btn">Смотреть дроп <span class="arr">→</span></a>
-            <a href="#sizes" class="btn btn--ghost">Размерная сетка</a>
-          </div>
-        </div>
-        <div class="hero__panel">
-          <img src="images/photo_2026-06-17_18-55-28.jpg" alt="SPW camo baggy lookbook" onerror="this.classList.add('img-missing')" />
-          <div class="ph-fill">
-            <span class="ph-tag">FIG. 01 / LOOKBOOK</span>
-            <div class="ph-big">SS26<br><span class="ph-mark">— CAMO DROP</span></div>
-            <span class="ph-tag">SPW / MINSK</span>
-          </div>
-        </div>
+      <div class="svc reveal"><span class="idx">02</span>
+        <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 30l6-12h28l6 12M4 30h40v6H4z"/><path d="M10 18l4-6h20l4 6"/><circle cx="14" cy="36" r="3"/><circle cx="34" cy="36" r="3"/></svg>
+        <h3>Обвесы и аэродинамика</h3>
+        <p>Бамперы, сплиттеры, диффузоры, пороги, спойлеры. Любой стиль.</p>
+        <button class="svc-order" data-svc="Обвесы и аэродинамика">Заказать →</button>
       </div>
-    </div>
-  </section>
-
-  <!-- MARQUEE -->
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee__track">
-      <span>SPW ✦ SKATEPARK WEAR ✦ МИНСК ✦ ДОСТАВКА РБ / СНГ ✦&nbsp;</span>
-      <span>SPW ✦ SKATEPARK WEAR ✦ МИНСК ✦ ДОСТАВКА РБ / СНГ ✦&nbsp;</span>
+      <div class="svc reveal"><span class="idx">03</span>
+        <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><circle cx="24" cy="24" r="20"/><circle cx="24" cy="24" r="5"/><path d="M9 24h10M29 24h10M24 9v6"/></svg>
+        <h3>Рули и интерьер</h3>
+        <p>Спортивные рули, накладки, карбоновые детали салона.</p>
+        <button class="svc-order" data-svc="Рули и интерьер">Заказать →</button>
+      </div>
+      <div class="svc reveal"><span class="idx">04</span>
+        <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M24 6v10M24 32v10"/><rect x="16" y="16" width="16" height="16" rx="2"/><path d="M12 16h-4M40 16h-4M12 32H8M40 32h-4"/></svg>
+        <h3>Подвеска и проставки</h3>
+        <p>Проставки колёс, занижение, пружины, стойки.</p>
+        <button class="svc-order" data-svc="Подвеска и проставки">Заказать →</button>
+      </div>
+      <div class="svc reveal"><span class="idx">05</span>
+        <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 28h22c4 0 6-2 8-4l6-4M6 28v6h18"/><circle cx="40" cy="20" r="3"/><path d="M6 28c-2 0-2-6 2-6h16"/></svg>
+        <h3>Выхлопные системы</h3>
+        <p>Насадки, прямотоки, спортивные глушители.</p>
+        <button class="svc-order" data-svc="Выхлопные системы">Заказать →</button>
+      </div>
+      <div class="svc reveal"><span class="idx">06</span>
+        <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M8 10h32v22H26l-8 8v-8H8z"/><path d="M16 18h16M16 24h10"/></svg>
+        <h3>Консультация и подбор</h3>
+        <p>Бесплатная помощь в подборе под ваш автомобиль и бюджет.</p>
+        <button class="svc-order" data-svc="Консультация и подбор">Заказать →</button>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- MANIFESTO -->
-  <section class="block manifesto">
-    <div class="wrap reveal">
-      <p>SPW — это не просто <span class="out">одежда.</span> Это про скейт, двор и <span class="accent">всё что между.</span></p>
-      <p class="sub">Бренд вырос из минской скейт-тусовки: разбитые доски, бордюры у ДК, рэп из колонки на телефоне. Делаем бэгги-крой — широкие джинсы, шорты и штаны, которые не сковывают на доске. Камуфляж, деним, чёрный котон, фирменная вышивка-маскот «тыква-ведьма» и граффити «Skatepark Wear». Каждый дроп — ограниченным тиражом.</p>
+<div class="divider"><i></i></div>
+
+<!-- ============ BRANDS ============ -->
+<section id="brands" class="sec">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="label">// КАТАЛОГ //</span>
+      <h2 class="h2">Бренды, с которыми<br>мы <span>работаем</span></h2>
     </div>
-  </section>
-
-  <!-- CATALOG -->
-  <section class="block" id="catalog">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="idx">[ 02 ]</span>
-        <h2>Коллекция / SS26</h2>
-      </div>
-
-      <div class="grid stagger">
-
-        <!-- 01 -->
-        <article class="card" data-product="SPW SHORTS — BLACK / GRAFFITI" data-price="99 BYN" data-sizes="XS,S,M,L,XL,XXL">
-          <div class="card__media">
-            <img src="images/photo_2026-06-17_18-55-12.jpg" alt="SPW Black Graffiti Shorts" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
-            <span class="card__num">01</span>
-            <span class="card__status in">В наличии</span>
-            <div class="card__ph"><div class="pmark">[ ФОТО ]</div></div>
-          </div>
-          <div class="card__body">
-            <div class="card__head"><div class="card__name">Shorts — Graffiti</div><div class="card__price">99 BYN</div></div>
-            <p class="card__desc">Сигнатурные бэгги-шорты до колена. Чёрный плотный котон, белая граффити-вышивка «Skatepark Wear» по низу штанины. Пояс со шлёвками, два задних кармана, широкий свободный крой.</p>
-            <dl class="specs"><dt>Крой</dt><dd>Baggy / knee</dd><dt>Деталь</dt><dd>Graffiti embroidery</dd><dt>Цвет</dt><dd>Black</dd></dl>
-            <div class="card__foot"><div class="sizes"><span>XS</span><span>S</span><span>M</span><span>L</span><span>XL</span><span>XXL</span></div></div>
-            <button class="btn order-btn">Заказать <span class="arr">→</span></button>
-          </div>
-        </article>
-
-        <!-- 02 -->
-        <article class="card" data-product="SPW SHORTS — BLACK / MASCOT" data-price="99 BYN" data-sizes="XS,S,M,L,XL,XXL">
-          <div class="card__media">
-            <img src="images/photo_2026-06-17_18-54-51.jpg" alt="SPW Black Mascot Shorts" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
-            <span class="card__num">02</span>
-            <span class="card__status in">В наличии</span>
-            <div class="card__ph"><div class="pmark">[ ФОТО ]</div></div>
-          </div>
-          <div class="card__body">
-            <div class="card__head"><div class="card__name">Shorts — Mascot</div><div class="card__price">99 BYN</div></div>
-            <p class="card__desc">Чёрные бэгги-шорты с фирменным маскотом «тыква-ведьма SPW» и декоративной строчкой-стежками. Тот же широкий силуэт до колена, плотная ткань. Y2K-вайб на каждый день.</p>
-            <dl class="specs"><dt>Крой</dt><dd>Baggy / knee</dd><dt>Деталь</dt><dd>Mascot embroidery</dd><dt>Цвет</dt><dd>Washed black</dd></dl>
-            <div class="card__foot"><div class="sizes"><span>XS</span><span>S</span><span>M</span><span>L</span><span>XL</span><span>XXL</span></div></div>
-            <button class="btn order-btn">Заказать <span class="arr">→</span></button>
-          </div>
-        </article>
-
-        <!-- 03 -->
-        <article class="card" data-product="SPW SHORTS — WHITE" data-price="99 BYN" data-sizes="XS,S,M,L,XL,XXL">
-          <div class="card__media">
-            <img src="images/photo_2026-06-17_18-54-43.jpg" alt="SPW White Shorts" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
-            <span class="card__num">03</span>
-            <span class="card__status in">В наличии</span>
-            <div class="card__ph"><div class="pmark">[ ФОТО ]</div></div>
-          </div>
-          <div class="card__body">
-            <div class="card__head"><div class="card__name">Shorts — White</div><div class="card__price">99 BYN</div></div>
-            <p class="card__desc">Белые бэгги-джорты с маскотом SPW и контрастной строчкой. Светлая база под любой верх — худи, джерси, ветровку. Маркие, но эффектные: для тех, кто не боится белого на скейте.</p>
-            <dl class="specs"><dt>Крой</dt><dd>Baggy / knee</dd><dt>Деталь</dt><dd>Mascot embroidery</dd><dt>Цвет</dt><dd>White</dd></dl>
-            <div class="card__foot"><div class="sizes"><span>XS</span><span>S</span><span>M</span><span>L</span><span>XL</span><span>XXL</span></div></div>
-            <button class="btn order-btn">Заказать <span class="arr">→</span></button>
-          </div>
-        </article>
-
-        <!-- 04 -->
-        <article class="card" data-product="SPW SHORTS — BLUE DENIM" data-price="105 BYN" data-sizes="XS,S,M,L,XL,XXL">
-          <div class="card__media">
-            <img src="images/photo_2026-06-17_18-54-47.jpg" alt="SPW Blue Denim Shorts" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
-            <span class="card__num">04</span>
-            <span class="card__status in">В наличии</span>
-            <div class="card__ph"><div class="pmark">[ ФОТО ]</div></div>
-          </div>
-          <div class="card__body">
-            <div class="card__head"><div class="card__name">Shorts — Denim</div><div class="card__price">105 BYN</div></div>
-            <p class="card__desc">Джинсовые бэгги-джорты в среднем индиго с маскотом SPW. Настоящий деним, широкая штанина до колена, задние карманы. Классика Y2K в исполнении из Минска.</p>
-            <dl class="specs"><dt>Крой</dt><dd>Baggy / knee</dd><dt>Ткань</dt><dd>Denim</dd><dt>Цвет</dt><dd>Mid indigo</dd></dl>
-            <div class="card__foot"><div class="sizes"><span>XS</span><span>S</span><span>M</span><span>L</span><span>XL</span><span>XXL</span></div></div>
-            <button class="btn order-btn">Заказать <span class="arr">→</span></button>
-          </div>
-        </article>
-
-        <!-- 05 -->
-        <article class="card" data-product="SPW SHORTS — CAMO" data-price="109 BYN" data-sizes="XS,S,M,L,XL,XXL">
-          <div class="card__media">
-            <img src="images/photo_2026-06-17_18-55-03.jpg" alt="SPW Camo Shorts" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
-            <span class="card__num">05</span>
-            <span class="card__status in">В наличии</span>
-            <div class="card__ph"><div class="pmark">[ ФОТО ]</div></div>
-          </div>
-          <div class="card__body">
-            <div class="card__head"><div class="card__name">Shorts — Camo</div><div class="card__price">109 BYN</div></div>
-            <p class="card__desc">Бэгги-шорты в камуфляже: woodland, forest, tiger и digital на выбор. Плотная ткань, карго-карманы, тот же свободный крой до колена. Расцветки ограниченной партии.</p>
-            <dl class="specs"><dt>Крой</dt><dd>Baggy / knee</dd><dt>Варианты</dt><dd>Woodland / tiger / digital</dd><dt>Цвет</dt><dd>Camo</dd></dl>
-            <div class="card__foot"><div class="sizes"><span>XS</span><span>S</span><span>M</span><span>L</span><span>XL</span><span>XXL</span></div></div>
-            <button class="btn order-btn">Заказать <span class="arr">→</span></button>
-          </div>
-        </article>
-
-        <!-- 06 -->
-        <article class="card" data-product="SPW BAGGY JEANS — BLUE" data-price="129 BYN" data-sizes="XS,S,M,L,XL,XXL">
-          <div class="card__media">
-            <img src="images/photo_2026-06-17_18-54-06.jpg" alt="SPW Baggy Jeans" class="card__img" loading="lazy" onerror="this.classList.add('img-missing')" />
-            <span class="card__num">06</span>
-            <span class="card__status in">В наличии</span>
-            <div class="card__ph"><div class="pmark">[ ФОТО ]</div></div>
-          </div>
-          <div class="card__body">
-            <div class="card__head"><div class="card__name">Baggy Jeans</div><div class="card__price">129 BYN</div></div>
-            <p class="card__desc">Полноразмерные бэгги-джинсы в синем индиго с фирменной графикой на штанине. Очень широкая нога, мягкий деним, заводская стирка. Главная вещь под зиму и круглый год. Сетка — в разделе «Размеры → Штаны».</p>
-            <dl class="specs"><dt>Крой</dt><dd>Baggy / wide</dd><dt>Ткань</dt><dd>Denim</dd><dt>Цвет</dt><dd>Blue indigo</dd></dl>
-            <div class="card__foot"><div class="sizes"><span>XS</span><span>S</span><span>M</span><span>L</span><span>XL</span><span>XXL</span></div></div>
-            <button class="btn order-btn">Заказать <span class="arr">→</span></button>
-          </div>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- SIZES -->
-  <section class="block" id="sizes">
-    <div class="wrap">
-      <div class="sec-head reveal"><span class="idx">[ 03 ]</span><h2>Размеры</h2></div>
-      <div class="reveal">
-        <div class="size-tabs" role="tablist">
-          <button class="size-tab active" data-t="shorts" role="tab">Шорты</button>
-          <button class="size-tab" data-t="pants" role="tab">Штаны / Джинсы</button>
-        </div>
-
-        <div class="size-panel" data-table="shorts">
-          <div class="size-layout">
-            <table class="size">
-              <thead><tr><th>size, cm</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th></tr></thead>
-              <tbody>
-                <tr><th>A — пояс</th><td>36</td><td>39</td><td>44</td><td>46</td><td>48</td><td>51</td></tr>
-                <tr><th>B — низ</th><td>36</td><td>37</td><td>38</td><td>39</td><td>39</td><td>40</td></tr>
-                <tr><th>C — длина</th><td class="accent-col">55</td><td class="accent-col">60</td><td class="accent-col">66</td><td class="accent-col">71</td><td class="accent-col">75</td><td class="accent-col">80</td></tr>
-              </tbody>
-            </table>
-            <div class="size-legend">
-              <div class="lg"><b>A</b><span>Пояс — ширина по поясу (в разложенном виде, см)</span></div>
-              <div class="lg"><b>B</b><span>Низ — ширина штанины по низу (см)</span></div>
-              <div class="lg"><b>C</b><span>Длина — общая длина изделия (см)</span></div>
-              <p class="size-note">↑ Замеры в сантиметрах. Все шорты — бэгги-крой. Сомневаешься между размерами — пиши в Telegram.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="size-panel" data-table="pants" hidden>
-          <div class="size-layout">
-            <table class="size">
-              <thead><tr><th>size, cm</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th></tr></thead>
-              <tbody>
-                <tr><th>A — пояс</th><td>36</td><td>39</td><td>41</td><td>44</td><td>48</td><td>52</td></tr>
-                <tr><th>B — низ</th><td>37</td><td>38</td><td>38</td><td>39</td><td>39</td><td>40</td></tr>
-                <tr><th>C — длина</th><td class="accent-col">98</td><td class="accent-col">102</td><td class="accent-col">106</td><td class="accent-col">110</td><td class="accent-col">114</td><td class="accent-col">118</td></tr>
-              </tbody>
-            </table>
-            <div class="size-legend">
-              <div class="lg"><b>A</b><span>Пояс — ширина по поясу (в разложенном виде, см)</span></div>
-              <div class="lg"><b>B</b><span>Низ — ширина штанины по низу (см)</span></div>
-              <div class="lg"><b>C</b><span>Длина — общая длина изделия (см)</span></div>
-              <p class="size-note">↑ Замеры в сантиметрах. Штаны и джинсы — бэгги с заужением к низу.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- LOOKBOOK -->
-  <section class="block" id="lookbook">
-    <div class="wrap">
-      <div class="sec-head reveal"><span class="idx">[ 04 ]</span><h2>Lookbook</h2></div>
-      <div class="lookbook-grid stagger">
-        <div class="look">
-          <img src="images/photo_2026-06-17_18-55-17.jpg" alt="SPW black graffiti shorts on rail" loading="lazy" onerror="this.classList.add('img-missing')" />
-          <div class="l-fill"><span class="l-idx">LB / 01</span><div class="l-cap">Graffiti<br>shorts</div></div>
-        </div>
-        <div class="look">
-          <img src="images/photo_2026-06-17_18-54-56.jpg" alt="SPW white pants sunset" loading="lazy" onerror="this.classList.add('img-missing')" />
-          <div class="l-fill"><span class="l-idx">LB / 02</span><div class="l-cap">White<br>baggy</div></div>
-        </div>
-        <div class="look">
-          <img src="images/photo_2026-06-17_18-54-24.jpg" alt="SPW camo lookbook" loading="lazy" onerror="this.classList.add('img-missing')" />
-          <div class="l-fill"><span class="l-idx">LB / 03</span><div class="l-cap">Двор<br>SS26</div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section class="block" id="about">
-    <div class="wrap">
-      <div class="sec-head reveal"><span class="idx">[ 05 ]</span><h2>О бренде</h2></div>
-      <div class="about-grid">
-        <div class="about-text reveal">
-          <p class="pull">Мы из Минска. Делаем форму для своих.</p>
-          <p><b>SPW (Skatepark Wear)</b> — это не «ещё один мерч». Бренд собрался вокруг минского скейтпарка и тусовки, где скейт, рэп и двор — одно целое. Сначала шили для себя и пацанов с района, потом за вещами начали писать из других городов.</p>
-          <p>Фишка — <b>бэгги-крой</b>: широченные джинсы, шорты-джорты и штаны, которые не сковывают на доске. Камуфляж, деним, чёрный и белый котон, фирменная вышивка-маскот «тыква-ведьма» и граффити «Skatepark Wear». Отшиваем ограниченными партиями — ходовые размеры разлетаются быстро.</p>
-          <p>Следи за новыми дропами и рестоками в <b>TikTok</b> и <b>Instagram</b> — там первыми показываем съёмки и анонсы.</p>
-          <div class="about-mascot">
-            <img src="images/photo_2026-06-17_18-54-34.jpg" alt="SPW mascot" onerror="this.classList.add('img-missing'); this.style.display='none'" />
-            <div class="mtxt"><b>SPW MASCOT</b><br>Тыква-ведьма и дым «SPW» — фирменный знак бренда, который ты найдёшь на вышивке.</div>
-          </div>
-        </div>
-        <div class="facts reveal">
-          <div class="fact"><span class="f-no">01</span><div><div class="f-title">Сделано в Минске</div><div class="f-text">Отшиваем локально, контролируем каждую партию.</div></div></div>
-          <div class="fact"><span class="f-no">02</span><div><div class="f-title">Честные размеры</div><div class="f-text">Реальные замеры по каждой вещи — сетка в разделе «Размеры».</div></div></div>
-          <div class="fact"><span class="f-no">03</span><div><div class="f-title">Доставка РБ / СНГ</div><div class="f-text">Беларусь, Россия, Казахстан и далее по СНГ.</div></div></div>
-          <div class="fact"><span class="f-no">04</span><div><div class="f-title">Лимитированные дропы</div><div class="f-text">Малые партии. Разошёлся размер — ждём рестока.</div></div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section class="block" id="faq">
-    <div class="wrap">
-      <div class="sec-head reveal"><span class="idx">[ 06 ]</span><h2>Доставка / FAQ</h2></div>
-      <div class="faq reveal">
-        <details open><summary>Куда доставляете? <span class="plus">+</span></summary><div class="answer">Доставка по Беларуси и странам СНГ (Россия, Казахстан и др.). Украина, Польша и Литва в зону доставки не входят.</div></details>
-        <details><summary>Как оформить заказ? <span class="plus">+</span></summary><div class="answer">Нажми «Заказать» на нужной позиции, заполни форму (имя, контакт, размер) — заявка уйдёт нам в Telegram. Мы свяжемся, подтвердим наличие, размер и согласуем доставку и оплату.</div></details>
-        <details><summary>Как выбрать размер? <span class="plus">+</span></summary><div class="answer">Сверься с разделом «Размеры» — там реальные замеры в см по шортам и штанам/джинсам (A — пояс, B — низ штанины, C — длина). Сомневаешься между размерами — напиши нам в Telegram или Instagram.</div></details>
-        <details><summary>Когда будет ресток? <span class="plus">+</span></summary><div class="answer">Дропы и рестоки анонсируем первыми в TikTok и Instagram <b>@_skatepark.wear</b>. Подпишись, чтобы не пропустить — ходовые размеры уходят быстро.</div></details>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="wrap">
-      <div class="foot-top">
-        <div class="foot-logo">SP<span class="tail">W</span></div>
-        <div class="foot-col">
-          <h4>Навигация</h4>
-          <a href="#catalog">Каталог</a>
-          <a href="#sizes">Размеры</a>
-          <a href="#lookbook">Lookbook</a>
-          <a href="#about">О бренде</a>
-          <a href="#faq">Доставка / FAQ</a>
-        </div>
-        <div class="foot-col">
-          <h4>Соцсети</h4>
-          <a href="https://instagram.com/_skatepark.wear" target="_blank" rel="noopener">Instagram → @_skatepark.wear</a>
-          <a href="https://tiktok.com/@_skatepark.wear" target="_blank" rel="noopener">TikTok → @_skatepark.wear</a>
-          <a href="https://t.me/_skateparkwear" target="_blank" rel="noopener">Telegram → заказы</a>
-        </div>
-      </div>
-      <div class="foot-bottom">
-        <p class="foot-note">Доставка по РБ и СНГ. Украина, Польша, Литва — не входят.</p>
-        <p>© SPW 2024 — SKATEPARK WEAR / MINSK</p>
-      </div>
-    </div>
-  </footer>
-
-  <button class="to-top" id="toTop" aria-label="Наверх">↑</button>
-
-  <!-- LIGHTBOX -->
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр фото">
-    <button class="lb-close" id="lbClose" aria-label="Закрыть">&times;</button>
-    <img id="lbImg" src="" alt="" />
-    <div class="lb-hint">Клик / ESC — закрыть</div>
   </div>
+  <div class="ticker-wrap reveal" id="tickerWrap"></div>
+  <div class="wrap"><p class="brands-note">Не нашли нужный бренд? <b>Мы найдём его для вас.</b></p></div>
+</section>
 
-  <!-- MODAL -->
-  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal">
-      <button class="modal-close" id="modalClose" aria-label="Закрыть">&times;</button>
-      <span class="m-idx" id="modalIdx">SPW / ЗАКАЗ</span>
-      <h3 id="modalTitle">Товар</h3>
-      <p class="m-price" id="modalPrice">—</p>
-      <form id="orderForm">
-        <div class="field"><label for="f-name">Имя</label><input id="f-name" type="text" autocomplete="name" required /></div>
-        <div class="field"><label for="f-contact">Telegram / Телефон</label><input id="f-contact" type="text" required /></div>
-        <div class="field"><label for="f-size">Размер</label><select id="f-size"></select></div>
-        <div class="field"><label for="f-comment">Комментарий</label><textarea id="f-comment" placeholder="Цвет, пожелания, вопросы по размеру…"></textarea></div>
-        <button type="submit" class="btn">Отправить в Telegram <span class="arr">→</span></button>
-        <p class="m-hint">Заявка откроется в Telegram @_skateparkwear</p>
+<div class="divider"><i></i></div>
+
+<!-- ============ PORTFOLIO ============ -->
+<section id="portfolio" class="sec">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="label">// НАШИ РАБОТЫ //</span>
+      <h2 class="h2">Портфолио</h2>
+      <p class="lede">Реальные проекты. Реальные клиенты.</p>
+    </div>
+    <div class="filters reveal" id="filters">
+      <button class="filter active" data-f="all">Все</button>
+      <button class="filter" data-f="disks">Диски</button>
+      <button class="filter" data-f="body">Обвесы</button>
+      <button class="filter" data-f="wheel">Рули</button>
+      <button class="filter" data-f="interior">Интерьер</button>
+    </div>
+    <div class="gallery reveal" id="gallery"></div>
+  </div>
+</section>
+
+<!-- lightbox -->
+<div id="lightbox" aria-hidden="true">
+  <button class="lb-close" id="lbClose" aria-label="Закрыть">×</button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Назад">‹</button>
+  <div id="lbStage"></div>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Вперёд">›</button>
+  <div class="lb-count" id="lbCount"></div>
+</div>
+
+<div class="divider"><i></i></div>
+
+<!-- ============ ORDER BUILDER ============ -->
+<section id="order" class="sec">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="label">// КОНСТРУКТОР ЗАКАЗА //</span>
+      <h2 class="h2">Собери свой <span>проект</span></h2>
+      <p class="lede">Заполните одну из форм — и мы рассчитаем стоимость с доставкой. Свяжемся в течение 2 часов.</p>
+    </div>
+
+    <div class="tabs reveal" id="tabs">
+      <button class="tab active" data-tab="t1">По ссылке</button>
+      <button class="tab" data-tab="t2">Подбор дисков</button>
+      <button class="tab" data-tab="t3">Другие запчасти</button>
+    </div>
+
+    <!-- TAB 1 -->
+    <form class="panel active" id="t1" data-name="Заказ по ссылке">
+      <p class="helper">Нашли диск на Taobao, AliExpress или у производителя? Скиньте ссылку — мы рассчитаем стоимость с доставкой.</p>
+      <div class="form-grid">
+        <div class="field full"><label>Ссылка на товар</label><input type="url" name="Ссылка" placeholder="https://..." required></div>
+        <div class="field full"><label>Комментарий / ваш автомобиль</label><textarea name="Комментарий" placeholder="Напр.: BMW F30, нужен такой диск в R19, цвет графит"></textarea></div>
+        <div class="field full"><label>Ваш Telegram / телефон</label><input type="text" name="Контакт" placeholder="@username или +375..." required></div>
+      </div>
+      <div class="form-foot">
+        <button class="btn btn-primary" type="submit">Отправить запрос →</button>
+        <span class="direct">Или напишите напрямую: <a href="https://t.me/PhantomWheelsBy" target="_blank" rel="noopener">@PhantomWheelsBy</a></span>
+      </div>
+      <div class="success"><span class="ok">✓</span> Заявка принята. Мы свяжемся с вами в течение 2 часов.</div>
+    </form>
+
+    <!-- TAB 2 -->
+    <form class="panel" id="t2" data-name="Подбор дисков">
+      <p class="helper">Укажите параметры — мы подберём диски, которые точно встанут на ваш автомобиль.</p>
+      <div class="form-grid">
+        <div class="field"><label>Марка автомобиля</label><select name="Марка"><option>BMW</option><option>Mercedes</option><option>Audi</option><option>Volkswagen</option><option>Toyota</option><option>Honda</option><option>Kia</option><option>Hyundai</option><option>Lexus</option><option>Porsche</option><option>другое</option></select></div>
+        <div class="field"><label>Модель</label><input type="text" name="Модель" placeholder="например 3-series F30"></div>
+        <div class="field"><label>Год выпуска</label><input type="number" name="Год" placeholder="2018" min="1980" max="2026"></div>
+        <div class="field"><label>Диаметр диска</label><select name="Диаметр"><option>R16</option><option>R17</option><option>R18</option><option>R19</option><option>R20</option><option>R21</option><option>R22</option></select></div>
+        <div class="field"><label>Ширина диска</label><select name="Ширина"><option>7J</option><option>7.5J</option><option>8J</option><option>8.5J</option><option>9J</option><option>9.5J</option><option>10J</option><option>10.5J</option><option>11J</option></select></div>
+        <div class="field"><label>PCD / Сверловка</label><select name="PCD"><option>4x100</option><option>4x108</option><option>4x114.3</option><option>5x100</option><option>5x108</option><option>5x112</option><option>5x114.3</option><option>5x120</option><option>5x130</option></select></div>
+        <div class="field"><label>Вылет ET</label><input type="number" name="ET" placeholder="например 35"></div>
+        <div class="field"><label>ЦО Ступица DIA</label><input type="number" step="0.1" name="DIA" placeholder="например 57.1"></div>
+        <div class="field"><label>Стиль</label><select name="Стиль"><option>Спортивный</option><option>Классический</option><option>Агрессивный</option><option>Минималистичный</option><option>Без предпочтений</option></select></div>
+        <div class="field"><label>Цвет</label><select name="Цвет"><option>Чёрный матовый</option><option>Чёрный глянец</option><option>Серебро</option><option>Графит</option><option>Бронза</option><option>Хром</option><option>Кастом</option></select></div>
+        <div class="field"><label>Бюджет</label><select name="Бюджет"><option>до $200</option><option>$200-500</option><option>$500-1000</option><option>$1000-2000</option><option>свыше $2000</option></select></div>
+        <div class="field"><label>Telegram / телефон</label><input type="text" name="Контакт" placeholder="@username или +375..." required></div>
+      </div>
+      <div class="form-foot">
+        <button class="btn btn-primary" type="submit">Подобрать диски →</button>
+        <span class="direct">Или напишите напрямую: <a href="https://t.me/PhantomWheelsBy" target="_blank" rel="noopener">@PhantomWheelsBy</a></span>
+      </div>
+      <div class="success"><span class="ok">✓</span> Заявка принята. Мы свяжемся с вами в течение 2 часов.</div>
+    </form>
+
+    <!-- TAB 3 -->
+    <form class="panel" id="t3" data-name="Другие запчасти">
+      <p class="helper">Любая деталь, которой нет на рынке СНГ — опишите, и мы найдём её для вас.</p>
+      <div class="form-grid">
+        <div class="field full"><label>Тип товара</label><select name="Тип"><option>Обвес / бампер</option><option>Спортивный руль</option><option>Карбоновые детали</option><option>Проставки колёс</option><option>Выхлопная система</option><option>Тормозная система</option><option>Элементы интерьера</option><option>Другое</option></select></div>
+        <div class="field full"><label>Марка и модель авто</label><input type="text" name="Авто" placeholder="например Mercedes W213 E-class"></div>
+        <div class="field full"><label>Описание желаемого</label><textarea name="Описание" placeholder="Опишите, что именно ищете"></textarea></div>
+        <div class="field full"><label>Ссылка на референс / фото (необязательно)</label><input type="text" name="Референс" placeholder="https://..."></div>
+        <div class="field"><label>Бюджет</label><input type="text" name="Бюджет" placeholder="например $500-1000"></div>
+        <div class="field"><label>Telegram / телефон</label><input type="text" name="Контакт" placeholder="@username или +375..." required></div>
+      </div>
+      <div class="form-foot">
+        <button class="btn btn-primary" type="submit">Отправить →</button>
+        <span class="direct">Или напишите напрямую: <a href="https://t.me/PhantomWheelsBy" target="_blank" rel="noopener">@PhantomWheelsBy</a></span>
+      </div>
+      <div class="success"><span class="ok">✓</span> Заявка принята. Мы свяжемся с вами в течение 2 часов.</div>
+    </form>
+  </div>
+</section>
+
+<div class="divider"><i></i></div>
+
+<!-- ============ PROCESS ============ -->
+<section id="process" class="sec">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="label">// КАК ЭТО РАБОТАЕТ //</span>
+      <h2 class="h2">Процесс <span>заказа</span></h2>
+    </div>
+    <div class="timeline">
+      <div class="step reveal"><span class="arrow">▶</span><div class="n">01</div><h4>Оставьте заявку</h4><p>Заполните форму или напишите в Telegram</p></div>
+      <div class="step reveal"><span class="arrow">▶</span><div class="n">02</div><h4>Консультация</h4><p>Мы подберём варианты под ваш автомобиль и бюджет</p></div>
+      <div class="step reveal"><span class="arrow">▶</span><div class="n">03</div><h4>Заказ и оплата</h4><p>Размещаем заказ у поставщика, фиксируем цену</p></div>
+      <div class="step reveal"><div class="n">04</div><h4>Доставка</h4><p>Доставка в Беларусь 14–30 дней, таможня включена</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><i></i></div>
+
+<!-- ============ CONTACTS ============ -->
+<section id="contacts" class="sec">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="label">// КОНТАКТЫ //</span>
+      <h2 class="h2">Связаться с <span>нами</span></h2>
+    </div>
+    <div class="contact-grid">
+      <div class="cinfo reveal">
+        <div class="row">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 3.5 2.5 11l5 1.8L18 6.5l-7.7 8 .3 5 3-3.5 4 3z"/></svg></div>
+          <div><div class="k">Telegram</div><div class="v"><a href="https://t.me/PhantomWheelsBy" target="_blank" rel="noopener">@PhantomWheelsBy</a></div></div>
+        </div>
+        <div class="row">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+          <div><div class="k">Канал</div><div class="v"><a href="https://t.me/phantomwheels" target="_blank" rel="noopener">t.me/phantomwheels</a></div></div>
+        </div>
+        <div class="row">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+          <div><div class="k">Часы работы</div><div class="v">Пн–Пт 10:00–20:00, Сб 11:00–18:00</div></div>
+        </div>
+        <div class="row">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+          <div><div class="k">Локация</div><div class="v">Беларусь, доставка по СНГ</div></div>
+        </div>
+      </div>
+
+      <form class="cbox reveal" id="cform" data-name="Быстрый контакт">
+        <div class="form-grid">
+          <div class="field full"><label>Имя</label><input type="text" name="Имя" placeholder="Как к вам обращаться" required></div>
+          <div class="field full"><label>Telegram / телефон</label><input type="text" name="Контакт" placeholder="@username или +375..." required></div>
+          <div class="field full"><label>Сообщение</label><textarea name="Сообщение" placeholder="Расскажите, что вас интересует"></textarea></div>
+        </div>
+        <div class="form-foot"><button class="btn btn-primary" type="submit">Отправить →</button></div>
+        <div class="success"><span class="ok">✓</span> Заявка принята. Мы свяжемся с вами в течение 2 часов.</div>
       </form>
     </div>
   </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="f-mono-line"><div class="pm">PW</div></div>
+  <div class="f-brand">PHANTOM<span> WHEELS</span></div>
+  <div class="f-tag">Делаем тачки злее.</div>
+  <div class="f-links">
+    <a href="#about">О нас</a>
+    <a href="#services">Услуги</a>
+    <a href="#portfolio">Портфолио</a>
+    <a href="#contacts">Контакты</a>
+  </div>
+  <div class="f-copy"><span>© 2024 Phantom Wheels. Все права защищены.</span><span class="sep">|</span><span>Беларусь</span></div>
+</footer>
+
+<!-- ============ ORDER MODAL ============ -->
+<div id="orderModal" aria-hidden="true">
+  <div class="modal-card">
+    <button class="mclose" id="modalClose" aria-label="Закрыть">×</button>
+    <span class="mlabel">// БЫСТРЫЙ ЗАКАЗ //</span>
+    <h3 id="modalTitle">Оформить <span>заказ</span></h3>
+    <form id="modalForm" data-name="Быстрый заказ">
+      <div class="form-grid">
+        <div class="field full"><label>Услуга</label><input type="text" name="Услуга" id="modalSvc" readonly></div>
+        <div class="field full"><label>Ваш автомобиль</label><input type="text" name="Авто" placeholder="например BMW F30, 2018"></div>
+        <div class="field full"><label>Комментарий / пожелания</label><textarea name="Комментарий" placeholder="Размер, цвет, стиль, бюджет — что важно"></textarea></div>
+        <div class="field full"><label>Telegram / телефон</label><input type="text" name="Контакт" placeholder="@username или +375..." required></div>
+      </div>
+      <div class="form-foot">
+        <button class="btn btn-primary" type="submit">Отправить заказ →</button>
+        <span class="direct">Или напрямую: <a href="https://t.me/PhantomWheelsBy" target="_blank" rel="noopener">@PhantomWheelsBy</a></span>
+      </div>
+      <div class="success"><span class="ok">✓</span> Заявка принята. Мы свяжемся с вами в течение 2 часов.</div>
+    </form>
+  </div>
+</div>
+
+<button id="totop" aria-label="Наверх"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 <script>
-  // Loader
-  (function () {
-    var loader = document.getElementById('loader'); if (!loader) return;
-    var bar = document.getElementById('lbar'), count = document.getElementById('lcount'), p = 0;
-    var iv = setInterval(function () {
-      p += Math.random() * 18 + 7;
-      if (p >= 100) { p = 100; clearInterval(iv); setTimeout(finish, 220); }
-      bar.style.width = p + '%'; count.textContent = ('00' + Math.floor(p)).slice(-3);
-    }, 100);
-    function finish () { loader.classList.add('done'); setTimeout(function () { loader.style.display = 'none'; }, 750); }
-    setTimeout(function () { if (loader.style.display !== 'none') finish(); }, 3500);
-  })();
+/* ============================================================
+   PHANTOM WHEELS — interactions (vanilla JS, no libraries)
+   ============================================================ */
+(function(){
+  'use strict';
+  const $=(s,c)=>(c||document).querySelector(s);
+  const $$=(s,c)=>[...(c||document).querySelectorAll(s)];
 
-  // Mobile nav
-  (function () {
-    var nav = document.getElementById('nav'), burger = document.getElementById('burger'); if (!burger) return;
-    burger.addEventListener('click', function () { nav.classList.toggle('open'); });
-    nav.querySelectorAll('.nav__links a').forEach(function (a) { a.addEventListener('click', function () { nav.classList.remove('open'); }); });
-  })();
+  /* ---- Loader ---- */
+  window.addEventListener('load',()=>{
+    setTimeout(()=>$('#loader').classList.add('hide'),1400);
+  });
 
-  // Scroll progress + back-to-top
-  (function () {
-    var bar = document.getElementById('progress'), top = document.getElementById('toTop');
-    function onScroll () {
-      var h = document.documentElement, st = h.scrollTop || document.body.scrollTop, max = h.scrollHeight - h.clientHeight;
-      var pct = max > 0 ? (st / max) * 100 : 0;
-      if (bar) bar.style.width = pct + '%';
-      if (top) top.classList.toggle('show', st > 500);
-    }
-    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
-    if (top) top.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
-  })();
+  /* ---- Glitch headline on load ---- */
+  setTimeout(()=>{const t=$('#heroTitle');t.classList.add('go');setTimeout(()=>t.classList.remove('go'),700);},1500);
 
-  // Reveal
-  (function () {
-    var els = document.querySelectorAll('.reveal, .stagger');
-    if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('visible'); }); return; }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) { if (entry.isIntersecting) { entry.target.classList.add('visible'); io.unobserve(entry.target); } });
-    }, { threshold: 0.12 });
-    els.forEach(function (e) { io.observe(e); });
-  })();
+  /* ---- Scroll progress + back-to-top ---- */
+  const prog=$('#progress'),totop=$('#totop');
+  const onScroll=()=>{
+    const h=document.documentElement;
+    const max=h.scrollHeight-h.clientHeight;
+    prog.style.width=(max>0?(h.scrollTop/max*100):0)+'%';
+    totop.classList.toggle('show',h.scrollTop>400);
+  };
+  document.addEventListener('scroll',onScroll,{passive:true});onScroll();
+  totop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 
-  // Size tabs
-  (function () {
-    var tabs = document.querySelectorAll('.size-tab'), panels = document.querySelectorAll('.size-panel');
-    tabs.forEach(function (tab) {
-      tab.addEventListener('click', function () {
-        tabs.forEach(function (t) { t.classList.remove('active'); }); tab.classList.add('active');
-        var t = tab.getAttribute('data-t');
-        panels.forEach(function (pn) { pn.hidden = (pn.getAttribute('data-table') !== t); });
-      });
+  /* ---- Mobile menu ---- */
+  const burger=$('#burger'),links=$('#navlinks');
+  burger.addEventListener('click',()=>{links.classList.toggle('open');burger.classList.toggle('on');});
+  $$('#navlinks a').forEach(a=>a.addEventListener('click',()=>links.classList.remove('open')));
+
+  /* ---- Hero wheel parallax tilt ---- */
+  const wheel=$('#wheelMain');
+  if(wheel&&matchMedia('(hover:hover)').matches){
+    addEventListener('mousemove',e=>{
+      const cx=(e.clientX/innerWidth-.5),cy=(e.clientY/innerHeight-.5);
+      wheel.style.transform=`translateY(-50%) perspective(900px) rotateY(${cx*10}deg) rotateX(${-cy*10}deg)`;
     });
-  })();
+  }
 
-  // Order modal
-  (function () {
-    var overlay = document.getElementById('overlay'), closeBtn = document.getElementById('modalClose');
-    var title = document.getElementById('modalTitle'), price = document.getElementById('modalPrice');
-    var sizeSelect = document.getElementById('f-size'), form = document.getElementById('orderForm');
-    var TG_URL = 'https://t.me/_skateparkwear', lastFocused = null;
-    function openModal (product, priceStr, sizes) {
-      lastFocused = document.activeElement; title.textContent = product; price.textContent = priceStr;
-      sizeSelect.innerHTML = '';
-      sizes.split(',').forEach(function (s) { var o = document.createElement('option'); o.value = s; o.textContent = s; sizeSelect.appendChild(o); });
-      overlay.classList.add('open'); document.body.style.overflow = 'hidden'; document.getElementById('f-name').focus();
-    }
-    function closeModal () { overlay.classList.remove('open'); document.body.style.overflow = ''; if (lastFocused) lastFocused.focus(); }
-    document.querySelectorAll('.order-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        if (btn.disabled) return; var card = btn.closest('.card');
-        openModal(card.getAttribute('data-product'), card.getAttribute('data-price'), card.getAttribute('data-sizes'));
-      });
-    });
-    closeBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal(); });
-    form.addEventListener('submit', function (e) { e.preventDefault(); window.open(TG_URL, '_blank', 'noopener'); closeModal(); form.reset(); });
-  })();
+  /* ---- Reveal on scroll ---- */
+  const io=new IntersectionObserver((ents)=>{
+    ents.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
+  },{threshold:.12});
+  $$('.reveal').forEach(el=>io.observe(el));
 
-  // Lightbox (click photo -> fullscreen)
-  (function () {
-    var lb = document.getElementById('lightbox'), lbImg = document.getElementById('lbImg'), lbClose = document.getElementById('lbClose');
-    if (!lb) return;
-    function open (src, alt) { lbImg.src = src; lbImg.alt = alt || ''; lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
-    function close () { lb.classList.remove('open'); document.body.style.overflow = ''; setTimeout(function () { lbImg.src = ''; }, 250); }
-    document.querySelectorAll('.card__media, .look, .hero__panel, .about-mascot img').forEach(function (c) {
-      c.addEventListener('click', function () {
-        var img = c.tagName === 'IMG' ? c : c.querySelector('img');
-        if (!img || img.classList.contains('img-missing') || !img.getAttribute('src')) return;
-        open(img.currentSrc || img.src, img.alt);
-      });
+  /* ---- Animated counters ---- */
+  const cio=new IntersectionObserver((ents)=>{
+    ents.forEach(en=>{
+      if(!en.isIntersecting)return;
+      const el=en.target,target=+el.dataset.count,plus=$('.plus',el);
+      const suffix=plus?plus.outerHTML:'';
+      let s=null;const dur=1500;
+      const step=ts=>{
+        if(!s)s=ts;const p=Math.min((ts-s)/dur,1);
+        const val=Math.floor((1-Math.pow(1-p,3))*target);
+        el.innerHTML=val+suffix;
+        if(p<1)requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);cio.unobserve(el);
     });
-    lbClose.addEventListener('click', close);
-    lb.addEventListener('click', function (e) { if (e.target !== lbImg) close(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && lb.classList.contains('open')) close(); });
-  })();
+  },{threshold:.5});
+  $$('[data-count]').forEach(el=>cio.observe(el));
+
+  /* ---- Active nav (scroll spy) ---- */
+  const navA=$$('#navlinks a');
+  const spy=new IntersectionObserver((ents)=>{
+    ents.forEach(en=>{
+      if(en.isIntersecting){
+        const id=en.target.id;
+        navA.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+id));
+      }
+    });
+  },{rootMargin:'-45% 0px -50% 0px'});
+  $$('section[id]').forEach(s=>spy.observe(s));
+
+  /* ---- Brands ticker (two opposite rows) ---- */
+  const brands=['HRE','Vossen','BBS','Work Wheels','Rays','Enkei','OZ Racing','Rotiform','Forgeline','ADV.1','Savini','Yokohama','Bridgestone','Toyo','Michelin','Brembo','KW Suspension','BC Racing','Bilstein','Tein'];
+  const mkRow=(arr,cls)=>{
+    const row=document.createElement('div');row.className='ticker '+cls;
+    [...arr,...arr].forEach(b=>{const p=document.createElement('span');p.className='pill';p.textContent=b;row.appendChild(p);});
+    return row;
+  };
+  const tw=$('#tickerWrap');
+  tw.appendChild(mkRow(brands.slice(0,10),'row1'));
+  tw.appendChild(mkRow(brands.slice(10),'row2'));
+
+  /* ---- Portfolio grid (work-1.jpg..work-12.jpg, graceful placeholder) ---- */
+  const cats=['disks','body','wheel','interior'];
+  const catRu={disks:'Диски',body:'Обвесы',wheel:'Рули',interior:'Интерьер'};
+  const gallery=$('#gallery');
+  const items=[];
+  const ovHTML=(i,cat)=>'<div class="ov"><div><small>'+catRu[cat]+'</small><span>Проект #'+i+'</span></div></div>';
+  for(let i=1;i<=12;i++){
+    const cat=cats[(i-1)%cats.length];
+    const card=document.createElement('div');
+    card.className='shot';card.dataset.cat=cat;card.dataset.n=i;card.dataset.ph='0';
+    const img=new Image();
+    img.loading='lazy';img.alt='Проект #'+i+' — '+catRu[cat];
+    img.onerror=()=>{
+      card.dataset.ph='1';
+      card.innerHTML='<div class="ph"><span class="pm">PW</span><small>ПРОЕКТ #'+i+'</small></div>'+ovHTML(i,cat);
+    };
+    img.src='images/work-'+i+'.jpg';
+    card.appendChild(img);
+    card.insertAdjacentHTML('beforeend',ovHTML(i,cat));
+    card.addEventListener('click',()=>openLb(i));
+    gallery.appendChild(card);
+    items.push({n:i,cat:cat,card:card});
+  }
+
+  /* filters */
+  $('#filters').addEventListener('click',e=>{
+    const b=e.target.closest('.filter');if(!b)return;
+    $$('.filter').forEach(f=>f.classList.remove('active'));b.classList.add('active');
+    const f=b.dataset.f;
+    items.forEach(it=>it.card.classList.toggle('hide',!(f==='all'||it.cat===f)));
+  });
+
+  /* ---- Lightbox ---- */
+  const lb=$('#lightbox'),stage=$('#lbStage'),count=$('#lbCount');
+  let visible=[],pos=0;
+  const visibleItems=()=>{
+    const f=$('.filter.active').dataset.f;
+    return items.filter(it=>f==='all'||it.cat===f);
+  };
+  function openLb(n){
+    visible=visibleItems();
+    pos=visible.findIndex(it=>it.n===n);if(pos<0)pos=0;
+    render();lb.classList.add('open');lb.setAttribute('aria-hidden','false');
+  }
+  function render(){
+    const it=visible[pos];
+    stage.innerHTML = it.card.dataset.ph==='1'
+      ? '<div class="lb-ph">PW</div>'
+      : '<img src="images/work-'+it.n+'.jpg" alt="Проект #'+it.n+'">';
+    count.textContent='Проект #'+it.n+'  ·  '+(pos+1)+' / '+visible.length;
+  }
+  const move=d=>{pos=(pos+d+visible.length)%visible.length;render();};
+  $('#lbNext').addEventListener('click',()=>move(1));
+  $('#lbPrev').addEventListener('click',()=>move(-1));
+  const closeLb=()=>{lb.classList.remove('open');lb.setAttribute('aria-hidden','true');};
+  $('#lbClose').addEventListener('click',closeLb);
+  lb.addEventListener('click',e=>{if(e.target===lb)closeLb();});
+  addEventListener('keydown',e=>{
+    if(!lb.classList.contains('open'))return;
+    if(e.key==='Escape')closeLb();
+    if(e.key==='ArrowRight')move(1);
+    if(e.key==='ArrowLeft')move(-1);
+  });
+
+  /* ---- Order modal (quick order from service cards) ---- */
+  const modal=$('#orderModal');
+  const openModal=svc=>{
+    $('#modalSvc').value=svc||'Подбор / консультация';
+    $('#modalTitle').innerHTML='Заказать: <span>'+(svc||'консультацию')+'</span>';
+    const ok=$('.success',modal);if(ok)ok.classList.remove('show');
+    modal.classList.add('open');modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  };
+  const closeModal=()=>{
+    modal.classList.remove('open');modal.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  };
+  $$('.svc-order').forEach(b=>b.addEventListener('click',()=>openModal(b.dataset.svc)));
+  $('#modalClose').addEventListener('click',closeModal);
+  modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))closeModal();});
+  /* close modal a moment after a successful submit */
+  $('#modalForm').addEventListener('submit',()=>setTimeout(closeModal,2600));
+
+  /* ---- Order tabs ---- */
+  $('#tabs').addEventListener('click',e=>{
+    const b=e.target.closest('.tab');if(!b)return;
+    $$('.tab').forEach(t=>t.classList.remove('active'));b.classList.add('active');
+    $$('.panel').forEach(p=>p.classList.remove('active'));
+    $('#'+b.dataset.tab).classList.add('active');
+  });
+
+  /* ---- Form submit (all forms) ---- */
+  $$('form').forEach(form=>{
+    form.addEventListener('submit',e=>{
+      e.preventDefault();
+      const btn=$('button[type=submit]',form);
+      if(btn){btn.style.opacity='.5';btn.style.pointerEvents='none';}
+      const ok=$('.success',form);
+      if(ok)ok.classList.add('show');
+      setTimeout(()=>{
+        form.querySelectorAll('input,textarea').forEach(i=>i.value='');
+        if(btn){btn.style.opacity='';btn.style.pointerEvents='';}
+      },400);
+      setTimeout(()=>{if(ok)ok.classList.remove('show');},6000);
+    });
+  });
+})();
 </script>
 </body>
 </html>
